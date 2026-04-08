@@ -1,17 +1,17 @@
 /**
- * Seed 2000–3000 fake streetwear products into MongoDB (same collection as API).
+ * Seed 2000–3000 fake streetwear products into Neon/Postgres via Prisma.
  *
- * 1. Copy `.env.example` to `.env` and set `MONGODB_URI`.
- * 2. Run: `npm run seed` or `node scripts/seedProducts.js`
+ * 1. Copy `.env.example` to `.env` and set `DATABASE_URL`.
+ * 2. Run: `npx prisma generate`
+ * 3. Run: `npm run seed` or `node scripts/seedProducts.js`
  *
  * Optional: `SEED_COUNT=2800 node scripts/seedProducts.js`
  */
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
-const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
-const Product = require("../models/Product");
+const prisma = require("../lib/prisma");
 
 const CATEGORIES = [
   "hoodies",
@@ -38,9 +38,9 @@ const ADJECTIVES = [
 ];
 
 async function main() {
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.DATABASE_URL;
   if (!uri) {
-    console.error("Set MONGODB_URI in .env");
+    console.error("Set DATABASE_URL in .env");
     process.exit(1);
   }
 
@@ -49,10 +49,8 @@ async function main() {
     3000
   );
 
-  await mongoose.connect(uri, { dbName: "streetwear" });
   console.log("Connected. Seeding", target, "products (replaces all existing)...");
-
-  await Product.deleteMany({});
+  await prisma.product.deleteMany();
 
   const batchSize = 500;
   let inserted = 0;
@@ -78,16 +76,19 @@ async function main() {
         rating
       });
     }
-    await Product.insertMany(chunk, { ordered: false });
+    await prisma.product.createMany({ data: chunk });
     inserted += n;
     console.log("Inserted", inserted, "/", target);
   }
 
-  console.log("Done. Total products:", await Product.countDocuments());
-  await mongoose.disconnect();
+  console.log("Done. Total products:", await prisma.product.count());
+  await prisma.$disconnect();
 }
 
 main().catch((e) => {
   console.error(e);
-  process.exit(1);
+  prisma
+    .$disconnect()
+    .catch(() => undefined)
+    .finally(() => process.exit(1));
 });

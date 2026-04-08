@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UrbanVibe | Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#e2e2e2",
+                    "surface-container-highest": "#353535",
+                    "secondary": "#c6c6c7",
+                    "surface-bright": "#393939",
+                    "on-primary-fixed-variant": "#74009f",
+                    "on-primary": "#520072",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-tertiary": "#472a00",
+                    "on-surface": "#e2e2e2",
+                    "surface-dim": "#131313",
+                    "tertiary": "#ffb960",
+                    "surface-container-low": "#1b1b1b",
+                    "tertiary-container": "#a76900",
+                    "surface-tint": "#ebb2ff",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-primary-fixed": "#320047",
+                    "secondary-container": "#454747",
+                    "on-error": "#690005",
+                    "surface": "#131313",
+                    "inverse-primary": "#9800d0",
+                    "surface-variant": "#353535",
+                    "surface-container": "#1f1f1f",
+                    "inverse-surface": "#e2e2e2",
+                    "outline-variant": "#504254",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-high": "#2a2a2a",
+                    "primary-container": "#bc13fe",
+                    "background": "#131313",
+                    "primary-fixed": "#f8d8ff",
+                    "on-secondary-container": "#b4b5b5",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#ebb2ff",
+                    "on-secondary-fixed-variant": "#454747",
+                    "on-primary-container": "#ffffff",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb960",
+                    "on-tertiary-fixed": "#2b1700",
+                    "on-tertiary-container": "#ffffff",
+                    "on-background": "#e2e2e2",
+                    "on-secondary": "#2f3131",
+                    "primary": "#ebb2ff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-surface-variant": "#d4c0d7",
+                    "tertiary-fixed": "#ffddb8",
+                    "outline": "#9d8ba0",
+                    "inverse-on-surface": "#303030"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+        }
+        .kinetic-input:focus {
+            outline: none;
+            border-bottom: 2px solid #bc13fe;
+            box-shadow: 0 4px 12px -4px rgba(188, 19, 254, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/70 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-8 h-20 w-full">
+<div class="text-2xl font-black tracking-tighter text-white font-['Space_Grotesk'] uppercase">UrbanVibe</div>
+<div class="hidden md:flex space-x-8 font-['Space_Grotesk'] tracking-tighter uppercase">
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">New Drops</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Men</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Women</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Accessories</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-primary-container text-[10px] w-4 h-4 flex items-center justify-center font-bold">2</span>
+</button>
+<button class="hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</nav>
+<main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+<header class="mb-12">
+<h1 class="text-6xl font-bold font-headline tracking-tighter uppercase leading-none mb-4">Checkout</h1>
+<p class="text-secondary font-body tracking-wide uppercase text-sm">Review your selection and finalize your kinetic directive.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Left Column: Forms -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Shipping Section -->
+<section class="p-8 bg-surface-container-low">
+<div class="flex items-center gap-4 mb-8">
+<span class="text-primary-container font-headline text-2xl font-bold">01</span>
+<h2 class="text-xl font-headline font-bold uppercase tracking-tight">Shipping Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">First Name</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body uppercase placeholder:text-neutral-700" placeholder="ALEX" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">Last Name</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body uppercase placeholder:text-neutral-700" placeholder="VIBE" type="text"/>
+</div>
+<div class="md:col-span-2 flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">Shipping Address</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body uppercase placeholder:text-neutral-700" placeholder="123 NEON BOULEVARD, SECTOR 7" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">City</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body uppercase placeholder:text-neutral-700" placeholder="CYBER CITY" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">Postal Code</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body uppercase placeholder:text-neutral-700" placeholder="90210-X" type="text"/>
+</div>
+</div>
+</section>
+<!-- Payment Section -->
+<section class="p-8 bg-surface-container-low">
+<div class="flex items-center gap-4 mb-8">
+<span class="text-primary-container font-headline text-2xl font-bold">02</span>
+<h2 class="text-xl font-headline font-bold uppercase tracking-tight">Payment Method</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Credit Card -->
+<div class="relative group cursor-pointer">
+<input checked="" class="hidden peer" id="card" name="payment" type="radio"/>
+<label class="block p-6 bg-surface-container border border-outline-variant/20 peer-checked:border-primary-container peer-checked:bg-surface-container-high transition-all" for="card">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary-container">credit_card</span>
+<div class="w-4 h-4 border border-outline-variant peer-checked:bg-primary-container flex items-center justify-center">
+<div class="w-2 h-2 bg-primary-container hidden peer-checked:block"></div>
+</div>
+</div>
+<p class="font-headline font-bold uppercase tracking-tight">Credit Card</p>
+<p class="text-xs text-neutral-500 mt-1 uppercase">VISA, MASTERCARD, AMEX</p>
+</label>
+</div>
+<!-- Apple Pay / Digital -->
+<div class="relative group cursor-pointer">
+<input class="hidden peer" id="wallet" name="payment" type="radio"/>
+<label class="block p-6 bg-surface-container border border-outline-variant/20 peer-checked:border-primary-container peer-checked:bg-surface-container-high transition-all" for="wallet">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary-container">account_balance_wallet</span>
+<div class="w-4 h-4 border border-outline-variant"></div>
+</div>
+<p class="font-headline font-bold uppercase tracking-tight">E-Wallet</p>
+<p class="text-xs text-neutral-500 mt-1 uppercase">APPLE PAY, PAYPAL</p>
+</label>
+</div>
+<!-- COD -->
+<div class="md:col-span-2 relative group cursor-pointer">
+<input class="hidden peer" id="cod" name="payment" type="radio"/>
+<label class="block p-6 bg-surface-container border border-outline-variant/20 peer-checked:border-primary-container peer-checked:bg-surface-container-high transition-all" for="cod">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary-container">payments</span>
+<div>
+<p class="font-headline font-bold uppercase tracking-tight">Cash on Delivery</p>
+<p class="text-xs text-neutral-500 uppercase">Pay when the directive arrives</p>
+</div>
+</div>
+<div class="w-4 h-4 border border-outline-variant"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- Card Details (Conditional feel) -->
+<div class="mt-8 pt-8 border-t border-outline-variant/10 space-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">Card Number</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body tracking-[0.2em]" placeholder="0000 0000 0000 0000" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">Expiry Date</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body" placeholder="MM/YY" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-label uppercase tracking-widest text-neutral-500">CVV</label>
+<input class="kinetic-input bg-surface-container border-b border-outline-variant/30 p-4 text-on-surface font-body" placeholder="***" type="password"/>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Order Summary (Sticky) -->
+<aside class="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
+<div class="bg-surface-container-low p-8 border-t-4 border-primary-container">
+<h3 class="text-xl font-headline font-bold uppercase tracking-tight mb-8">Order Summary</h3>
+<!-- Items List -->
+<div class="space-y-6 mb-8">
+<div class="flex gap-4">
+<div class="w-20 h-24 bg-surface-container-lowest flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern high-top urban sneaker in monochromatic black with subtle reflective tech-wear details on a clean dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7VAd9wXYsD-DJp53LJmALJprSdUhyc-BU7PjH0C4Ut8nnHHznmviNuQM6jheYWA9RPDMpidWaNkQjaO5Rv1-t33kL0RKz-MsR_Nci0a5y9_xYOw9WOwl1ItRkArhyvL58JezRMqJTIFYKbavI1Cit36ftqhr8HT9QfH9SWEv8mHN4BP04kcjwJGs6pyHPtPy5kCMZP15Qm--F8XBqtRg8hUtAIt0Hj8kC-ZWg_1EQ9MwsdJaKHanU2C9b84KVHwa9pbTwBcsvMUB5"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<p class="font-headline font-bold text-sm uppercase leading-tight">Vibe-X Stealth Runner</p>
+<p class="text-[10px] text-neutral-500 uppercase tracking-widest">Size: 42 | Black</p>
+</div>
+<p class="text-primary-container font-headline font-bold">$240.00</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-20 h-24 bg-surface-container-lowest flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Premium black oversized cotton t-shirt with minimalist futuristic typography on a dark studio background with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0J1GldDTYhK9aCa-_PxaYbwa-i41nl674WAOmcrlMZb4Sd9bzCnw5Vz3tO5hsrPjh0hZj4qSxPwGV6IMvEg8ZYSQySp3Sdy5zQ9npmn5iKHSPFyIFbAeJwPV80AsrbI8oXqPpx-_AhnYJydO2nLj7VpmsXxOS_-nfw5Y-1toJ3Z-bqHDA11mj4Rd4mpW6Fis7WMIL6iJGulUeygINzSrvlB08SyPtvzTH_oChXRwbb_-u5QQXwGF4XHt23vnhEAg_WPBNLQkbg0Ov"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<p class="font-headline font-bold text-sm uppercase leading-tight">Kinetic Heavy Tee</p>
+<p class="text-[10px] text-neutral-500 uppercase tracking-widest">Size: L | Noir</p>
+</div>
+<p class="text-primary-container font-headline font-bold">$85.00</p>
+</div>
+</div>
+</div>
+<!-- Totals -->
+<div class="space-y-4 pt-6 border-t border-outline-variant/20 font-body text-sm">
+<div class="flex justify-between uppercase">
+<span class="text-neutral-500">Subtotal</span>
+<span>$325.00</span>
+</div>
+<div class="flex justify-between uppercase">
+<span class="text-neutral-500">Shipping</span>
+<span class="text-primary-container">Free</span>
+</div>
+<div class="flex justify-between uppercase">
+<span class="text-neutral-500">Tax</span>
+<span>$26.00</span>
+</div>
+<div class="flex justify-between pt-6 border-t border-outline-variant/20">
+<span class="font-headline font-bold text-xl uppercase tracking-tighter">Total</span>
+<span class="font-headline font-bold text-xl text-primary-container">$351.00</span>
+</div>
+</div>
+<button class="w-full mt-10 bg-primary-container text-on-primary-container py-6 font-headline font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-[0.98] transition-all neon-glow">
+                        Complete Order
+                    </button>
+<p class="text-[10px] text-center text-neutral-600 mt-6 uppercase tracking-widest leading-relaxed">
+                        By placing this order, you agree to the UrbanVibe kinetic terms of service and data processing protocols.
+                    </p>
+</div>
+<!-- Trust Badges -->
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low p-4 flex flex-col items-center justify-center gap-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-neutral-500 text-lg">shield</span>
+<span class="text-[8px] uppercase tracking-tighter text-center">Secure SSL</span>
+</div>
+<div class="bg-surface-container-low p-4 flex flex-col items-center justify-center gap-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-neutral-500 text-lg">package_2</span>
+<span class="text-[8px] uppercase tracking-tighter text-center">Tracked</span>
+</div>
+<div class="bg-surface-container-low p-4 flex flex-col items-center justify-center gap-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-neutral-500 text-lg">refresh</span>
+<span class="text-[8px] uppercase tracking-tighter text-center">30D Return</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="space-y-6">
+<div class="text-xl font-bold text-white font-['Space_Grotesk'] uppercase">URBANVIBE</div>
+<p class="text-neutral-500 text-xs leading-relaxed font-['Inter'] uppercase tracking-widest">
+                    Kinetic noir directive. Engineering the future of street-ready high fashion.
+                </p>
+</div>
+<div>
+<h4 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Explore</h4>
+<ul class="space-y-4 text-neutral-500 text-sm uppercase tracking-widest">
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">About</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Sustainability</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Collaborations</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Service</h4>
+<ul class="space-y-4 text-neutral-500 text-sm uppercase tracking-widest">
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">FAQ</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Shipping</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Terms</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Vibe-Letter</h4>
+<div class="flex border-b border-white/10 pb-2">
+<input class="bg-transparent border-none text-xs w-full focus:ring-0 uppercase tracking-widest" placeholder="ENTER EMAIL" type="email"/>
+<button class="text-[#bc13fe]"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<p class="text-[8px] text-neutral-600 mt-4 uppercase tracking-[0.2em]">Join the kinetic network.</p>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+<span class="text-neutral-500 text-[10px] uppercase tracking-[0.3em]">© 2024 URBANVIBE. KINETIC NOIR DIRECTIVE.</span>
+<div class="flex gap-8 text-neutral-500">
+<span class="material-symbols-outlined hover:text-white cursor-pointer transition-colors">brand_awareness</span>
+<span class="material-symbols-outlined hover:text-white cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined hover:text-white cursor-pointer transition-colors">token</span>
+</div>
+</div>
+</footer>
+<script>
+  (function () {
+    const ROUTES = {
+      home: "/",
+      products: "/products",
+      cart: "/cart",
+      checkout: "/checkout",
+      login: "/login",
+      profile: "/profile"
+    };
+
+    function go(path) {
+      window.location.href = path;
+    }
+
+    function routeFromLabel(label) {
+      const t = (label || "").toLowerCase().trim();
+      if (!t) return null;
+      if (t.includes("urbanvibe") || t.includes("home")) return ROUTES.home;
+      if (t.includes("new drops") || t.includes("men") || t.includes("women") || t.includes("accessories")) return ROUTES.products;
+      if (t.includes("shop the drop") || t.includes("lookbook") || t.includes("view all") || t.includes("browse collection")) return ROUTES.products;
+      if (t.includes("add to bag") || t.includes("quick add")) return ROUTES.cart;
+      if (t.includes("proceed to checkout")) return ROUTES.checkout;
+      if (t.includes("complete order")) return ROUTES.profile;
+      if (t.includes("login") || t.includes("register")) return ROUTES.login;
+      if (t.includes("profile") || t.includes("account")) return ROUTES.profile;
+      return null;
+    }
+
+    document.querySelectorAll("a").forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      const target = routeFromLabel(a.textContent) || routeFromLabel(a.getAttribute("aria-label"));
+      if (href === "#" && target) {
+        a.setAttribute("href", target);
+      }
+    });
+
+    document.querySelectorAll("button").forEach((btn) => {
+      const icon = (btn.querySelector(".material-symbols-outlined") || {}).textContent || "";
+      if (icon.includes("shopping_bag")) btn.addEventListener("click", () => go(ROUTES.cart));
+      if (icon.includes("person")) btn.addEventListener("click", () => go(ROUTES.profile));
+
+      const target = routeFromLabel(btn.textContent);
+      if (target) {
+        btn.addEventListener("click", () => go(target));
+      }
+    });
+
+    document.querySelectorAll("form").forEach((form) => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        go(ROUTES.home);
+      });
+    });
+  })();
+</script>
+</body></html>

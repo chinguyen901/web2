@@ -1,9 +1,6 @@
 const getStripe = require("../../../lib/stripe");
 const getRawBody = require("../../../utils/getRawBody");
-const connectDB = require("../../../lib/db");
-const Order = require("../../../models/Order");
-const Product = require("../../../models/Product");
-const User = require("../../../models/User");
+const prisma = require("../../../lib/prisma");
 
 /**
  * Stripe webhook: verify signature with raw body, then update order + inventory.
@@ -30,27 +27,35 @@ async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  await connectDB();
-
   try {
     if (event.type === "payment_intent.succeeded") {
       const pi = event.data.object;
       const orderId = pi.metadata?.orderId;
       if (orderId) {
-        const order = await Order.findById(orderId);
+        const order = await prisma.order.findUnique({
+          where: { id: orderId },
+          include: { items: true }
+        });
         if (order && order.paymentStatus !== "paid") {
-          order.paymentStatus = "paid";
-          order.status = "paid";
-          order.paymentIntentId = pi.id;
-          await order.save();
-
-          for (const line of order.items) {
-            await Product.findByIdAndUpdate(line.product, {
-              $inc: { stock: -line.quantity }
+          await prisma.$transaction(async (tx) => {
+            await tx.order.update({
+              where: { id: order.id },
+              data: {
+                paymentStatus: "paid",
+                status: "paid",
+                paymentIntentId: pi.id
+              }
             });
-          }
 
-          await User.findByIdAndUpdate(order.user, { $set: { cart: [] } });
+            for (const line of order.items) {
+              await tx.product.update({
+                where: { id: line.productId },
+                data: { stock: { decrement: line.quantity } }
+              });
+            }
+
+            await tx.cartItem.deleteMany({ where: { userId: order.userId } });
+          });
         }
       }
     }
@@ -59,9 +64,12 @@ async function handler(req, res) {
       const pi = event.data.object;
       const orderId = pi.metadata?.orderId;
       if (orderId) {
-        await Order.findByIdAndUpdate(orderId, {
-          paymentStatus: "failed",
-          paymentIntentId: pi.id
+        await prisma.order.update({
+          where: { id: orderId },
+          data: {
+            paymentStatus: "failed",
+            paymentIntentId: pi.id
+          }
         });
       }
     }
@@ -72,10 +80,11 @@ async function handler(req, res) {
   return res.status(200).json({ received: true });
 }
 
-handler.config = {
+const config = {
   api: {
     bodyParser: false
   }
 };
 
 module.exports = handler;
+module.exports.config = config;

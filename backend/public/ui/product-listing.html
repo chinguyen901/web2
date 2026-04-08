@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#e2e2e2",
+                    "surface-container-highest": "#353535",
+                    "secondary": "#c6c6c7",
+                    "surface-bright": "#393939",
+                    "on-primary-fixed-variant": "#74009f",
+                    "on-primary": "#520072",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-tertiary": "#472a00",
+                    "on-surface": "#e2e2e2",
+                    "surface-dim": "#131313",
+                    "tertiary": "#ffb960",
+                    "surface-container-low": "#1b1b1b",
+                    "tertiary-container": "#a76900",
+                    "surface-tint": "#ebb2ff",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-primary-fixed": "#320047",
+                    "secondary-container": "#454747",
+                    "on-error": "#690005",
+                    "surface": "#131313",
+                    "inverse-primary": "#9800d0",
+                    "surface-variant": "#353535",
+                    "surface-container": "#1f1f1f",
+                    "inverse-surface": "#e2e2e2",
+                    "outline-variant": "#504254",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-high": "#2a2a2a",
+                    "primary-container": "#bc13fe",
+                    "background": "#131313",
+                    "primary-fixed": "#f8d8ff",
+                    "on-secondary-container": "#b4b5b5",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#ebb2ff",
+                    "on-secondary-fixed-variant": "#454747",
+                    "on-primary-container": "#ffffff",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb960",
+                    "on-tertiary-fixed": "#2b1700",
+                    "on-tertiary-container": "#ffffff",
+                    "on-background": "#e2e2e2",
+                    "on-secondary": "#2f3131",
+                    "primary": "#ebb2ff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-surface-variant": "#d4c0d7",
+                    "tertiary-fixed": "#ffddb8",
+                    "outline": "#9d8ba0",
+                    "inverse-on-surface": "#303030"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 20px 0px rgba(188, 19, 254, 0.4);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-white">
+<!-- TopNavBar Shell -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/70 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-8 h-20 w-full">
+<div class="flex items-center gap-12">
+<a class="text-2xl font-black tracking-tighter text-white font-headline uppercase" href="#">UrbanVibe</a>
+<div class="hidden md:flex gap-8">
+<a class="font-headline tracking-tighter uppercase text-[#bc13fe] border-b-2 border-[#bc13fe] pb-1 transition-all duration-300" href="#">New Drops</a>
+<a class="font-headline tracking-tighter uppercase text-neutral-400 hover:text-white transition-colors transition-all duration-300" href="#">Men</a>
+<a class="font-headline tracking-tighter uppercase text-neutral-400 hover:text-white transition-colors transition-all duration-300" href="#">Women</a>
+<a class="font-headline tracking-tighter uppercase text-neutral-400 hover:text-white transition-colors transition-all duration-300" href="#">Accessories</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-neutral-400 hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="text-neutral-400 hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-primary-container text-[10px] w-4 h-4 flex items-center justify-center font-bold">2</span>
+</button>
+<button class="text-neutral-400 hover:text-[#bc13fe] transition-all duration-300 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</nav>
+<main class="pt-24 pb-20 px-8 max-w-[1600px] mx-auto">
+<!-- Header & Quick Filters -->
+<header class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="text-primary-container font-headline font-bold uppercase tracking-[0.2em] text-sm">Collection / 2024</span>
+<h1 class="text-6xl md:text-8xl font-headline font-black uppercase tracking-tighter mt-2 leading-none">The Kinetic<br/>Directive</h1>
+</div>
+<div class="flex flex-wrap gap-4">
+<div class="group relative">
+<button class="flex items-center gap-2 border border-outline-variant/30 px-6 py-3 hover:border-primary-container transition-colors uppercase font-headline tracking-widest text-xs">
+                            Sort: Newest <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<!-- Dropdown Mock -->
+<div class="absolute right-0 top-full mt-2 w-48 bg-surface-container-highest border border-outline-variant/30 hidden group-hover:block z-10">
+<a class="block px-6 py-3 hover:bg-primary-container text-xs uppercase tracking-widest transition-colors" href="#">Price: Low-High</a>
+<a class="block px-6 py-3 hover:bg-primary-container text-xs uppercase tracking-widest transition-colors" href="#">Price: High-Low</a>
+<a class="block px-6 py-3 hover:bg-primary-container text-xs uppercase tracking-widest transition-colors" href="#">Popularity</a>
+</div>
+</div>
+<button class="flex md:hidden items-center gap-2 bg-white text-black px-6 py-3 uppercase font-headline tracking-widest text-xs font-bold">
+                        Filters <span class="material-symbols-outlined text-sm">tune</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-col md:flex-row gap-12">
+<!-- Sidebar Filters -->
+<aside class="hidden md:block w-64 shrink-0 space-y-10">
+<section>
+<h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Category</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Hoodies</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest text-primary-container">T-Shirts</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Sneakers</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Accessories</span>
+</label>
+</div>
+</section>
+<section>
+<h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Size</h3>
+<div class="grid grid-cols-3 gap-2">
+<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XS</button>
+<button class="border border-primary-container bg-primary-container/10 py-2 text-[10px]">S</button>
+<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">M</button>
+<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">L</button>
+<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XL</button>
+<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XXL</button>
+</div>
+</section>
+<section>
+<h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Price Range</h3>
+<div class="px-2">
+<input class="w-full h-1 bg-surface-container-highest accent-primary-container cursor-pointer appearance-none" type="range"/>
+<div class="flex justify-between mt-4 text-[10px] uppercase tracking-widest text-neutral-500">
+<span>$50</span>
+<span>$1200</span>
+</div>
+</div>
+</section>
+<section>
+<h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Rating</h3>
+<div class="space-y-2">
+<button class="flex items-center gap-2 group w-full">
+<div class="flex text-primary-container">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest group-hover:text-white transition-colors">&amp; UP</span>
+</button>
+</div>
+</section>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+<!-- Product Card 1 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Modern streetwear white hoodie with minimalist neon graphics studio shot on dark grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDrrDtkqzjD8qCZqNLWPnRLV-diEF0Xqz8xGjPzD2av-xTBe1MNMUjNz2gEWGS9fqI5vVTIQzbzXqTZjQnR_fo4IQMH_vTLFLLPRp6SREmmBELs3HNQEdmkThkhujUMu52mSdQKJhbN5NXxqf_XCON785zi8F5gMi-OMAcftDYOF6q880T5przumNDqz7zFw6AcC1BBgd0plHVrqvZ111rFyUh-bjjET18bmdKaf6X4H5EcPHmdkrBl_D5MSLxDLeMv9hphOmr-vXA"/>
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
+                                Quick Add — $145
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Heavyweight Fleece</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Cipher Hoodie v.01</h3>
+</div>
+<span class="font-headline font-black text-xl">$145</span>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Futuristic black sneakers with vibrant purple accents and thick architectural sole on dark stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoK1djUsT8sfc4GcjDMqidthWqKAtL_HvhdTxFb2iX4ReQgim3l7PjTjgQt_13ypG6YJ7JPGwPfFah7LBmsvNBV9ae7PxZv8n2nk6Pz_ruNrSq2lQujiZ4L3vb9oSP5s7xCZmaHvqi30BUjQ0ZwPEWYAbaWBvZlJz4b9-uOi5jn4l-0HxK9G_aQTKt4XwQ5gh--URpOoMToq0X8kpywXCBjQ_uKP2QOEUjBLTyznxn1uwYsJWkdayIa6UM29cPXKKb61h1cWUeHiXh"/>
+<div class="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+                            Sold Out
+                        </div>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-surface-container-highest text-neutral-400 w-full py-4 font-headline font-bold uppercase tracking-widest text-xs cursor-not-allowed">
+                                Notify Me
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-neutral-500 uppercase tracking-[0.2em] mb-1">Footwear / Kinetic</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Neon Phantom Low</h3>
+</div>
+<span class="font-headline font-black text-xl">$290</span>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Black oversized cotton t-shirt with large back typography print hanging in a brutalist industrial gallery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzml_j4VpI_zyIEGUWIsTqEyCUP7s4MFBF7lb-UA3PHlhMqG1FPwQMaVl5FeQyOGs1k7O-1yuMFDgZq-bnFvrQ9xC5xkzVooOow1VsYhIh_pJJy49uOX-fgjZSgH-6_yvbAqAbyCG9-ijTM6bxV_POLHT-O5F7reckGlRhnjKyd4bN8gAFGxf3QTS8s9vMhR9oW39eoAFbEFpVckis6SMQi4vKofktf4A6XjTQxAjcADTfHYMEqqbBvHZ5SECI63SHWL4XtVQBnr7b"/>
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
+                                Quick Add — $65
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Essential / Boxy Fit</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Brutalist Logo Tee</h3>
+</div>
+<span class="font-headline font-black text-xl">$65</span>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Luxury black leather shoulder bag with industrial metal hardware on a mirror surface with neon light reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Cwd1BCM_843IpKoh_u7ndbKf89B2_zAfDJtr70Kf9LvPPw5AsMtEWkShE-X2ri45VXR8Zvck7rQFmrOTtKPxmOSunrW9Nv02v5ErxnhTk1okN1b7k5VD4iywaiTQb0fbJ28B_tbIySZG0DYyarnawbfc1B4tnASveOw_2Oon2zFJCDbWKmfVKYDid-czA1Ewbl4Nlx6IxkjvJ-XMaK1dNPKxkx6GtCmw3X2G9tyvkPqmon09Utst_DHUp7DOH50jKn5Q-fgIho9M"/>
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
+                                Quick Add — $420
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Accessory / Noir</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Obsidian Utility Bag</h3>
+</div>
+<span class="font-headline font-black text-xl">$420</span>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Sleek techwear puffer jacket in deep charcoal grey with iridescent waterproof zippers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8KIegc52M3ivkF-CPzYXST-wTMFNL1R8Fv4iv2k-3EOXrITcjn8rPRzc4ffvraoDCOp3XRLunT2LmWPJXm7UxJ6DfAiwzuyq1paLbbD6EIWggotRvTB-GJ4ogXHe5V2ScRgIYc23zqgwUp2IxVNeQKPxQT406NAcdgrGkZIz4EKJ6yiOpJsP1pQwykni_NOagptord-JY7Xe_zxYQ_ci2ZBclCs_ImfTtLQh1Pqh5hg6GEjV1ttNrz_M1Sz67sFJ1cN8guzb6qdK7"/>
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
+                                Quick Add — $580
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Outerwear / Apex</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Glitch Puffer Shell</h3>
+</div>
+<span class="font-headline font-black text-xl">$580</span>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="group">
+<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Off-white minimalist sweatshirt with tonal embroidery on high-quality loopback cotton" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1p0dTpzfUybEoKpNAKB-JHz33C2LitYmqcBB-a6wqgxyMHLo23zLZ9Pt5_pImZfnm_Hw3GEElyUseCXLFzYb0tCqNWmWpANcNVWQw8q9Q62M6Ag5eVzjRz7OYGXWJk4drFwNZ1NLGJPBmUrgQ54Qa4zsIl658oksZF4bTif41NB1jA8GW76PQ88NQ5Pstbo4SUNmrNMZc7iFAweOY2H2FCwK6olVKkMglz53J1YX9kll-2CBXvlghW0u-0uwsBy4JrWikPeM6NI5l"/>
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
+                                Quick Add — $110
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Essential / Fleece</p>
+<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Mono Crewneck</h3>
+</div>
+<span class="font-headline font-black text-xl">$110</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Recommendations Section -->
+<section class="mt-32 pt-20 border-t border-white/5">
+<div class="flex items-center justify-between mb-12">
+<div>
+<h2 class="font-headline font-black uppercase text-4xl tracking-tighter">Based on your style</h2>
+<p class="text-neutral-500 text-xs uppercase tracking-widest mt-2">AI-Powered Curation for your aesthetic</p>
+</div>
+<div class="flex gap-2">
+<button class="w-12 h-12 border border-outline-variant/30 flex items-center justify-center hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">west</span>
+</button>
+<button class="w-12 h-12 border border-outline-variant/30 flex items-center justify-center hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">east</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 overflow-x-auto hide-scrollbar">
+<!-- Rec 1 -->
+<div class="min-w-[280px] p-4 bg-surface-container border border-outline-variant/10 hover:border-primary-container transition-all group">
+<div class="aspect-square mb-4 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" data-alt="Retro inspired street sneakers with high contrast black and white panels on neon lit surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbsnuA94eUVj7LrZIsW0D_NYcNXnb19qiTeDCg1YUlJucVhyRtW2mk8gqdaCIabT1-u7g5xaVbVaVAGVN8gumNuhauano1zSDMQZWQdTsvRFt0asos8lg4fVo7AJdGCGUfZ30Wu8So0tMaumZP4RTYljjyjqncseCs5i4Mi0iEhDub7mGFoeVel0Zl1NXWUZDUowjKwpWQlF8vsTQKtC4qMzjcXi-b8BAlBR8dXXYU4yG4DdpsN9gerGfkT_AtChoCWwMwyO6mhBlQ"/>
+</div>
+<h4 class="font-headline font-bold text-sm uppercase">Vector Runner X</h4>
+<p class="text-primary-container font-black text-lg mt-1">$185</p>
+</div>
+<!-- Rec 2 -->
+<div class="min-w-[280px] p-4 bg-surface-container border border-outline-variant/10 hover:border-primary-container transition-all group">
+<div class="aspect-square mb-4 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" data-alt="Male model wearing high-end techwear vest over black hoodie in rain-slicked city alley" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAshAiE95dubHbP8CiS1MogxU1MzGM9cPhAEkkz9QjtLzCskheqGb8E8jL3JfZ0Hd2NVxkJdlVE5NBWFDPSgcL9Vw2NcO8mz2KBT3OVgAHqDtq0GrIb4JJKrxZY55V60cb9cgVjt56b8goYjMK_3SfwvR_YknY_ZUxV85DFh_Ac5HQsbcJWd5QEEnoqiIAX3iNe3-FQPH8MB0yKo0K2GmiV0UttAYsXC3Pz-F95VAgIla-rsmPI2250HKWasYCJMRT5A7oLjgb9lUhL"/>
+</div>
+<h4 class="font-headline font-bold text-sm uppercase">Tactical Vest 03</h4>
+<p class="text-primary-container font-black text-lg mt-1">$220</p>
+</div>
+<!-- Rec 3 -->
+<div class="min-w-[280px] p-4 bg-surface-container border border-outline-variant/10 hover:border-primary-container transition-all group">
+<div class="aspect-square mb-4 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" data-alt="Candid street style photo of person wearing futuristic oversized denim jacket with glow-in-the-dark stitching" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGqJukokbj80abvVjkSj7LRue7xO4rdkk1CYQv_4YEzo5SBczhQU43vFEyB07GLsoD-cLUZBjpAGPg7EDC7382shQg0lxylrLUp4ZQbGhxlJBHysKrekRX525C9-BtbycvB7fFaqzwXYd7S_u-ZubjfXTI-HSwDpl4c4jTUqIQepGAibQgKncNo0KJOgJkOXKOT3GC6NEVlwsmlK5527fYrUma8bB58YYnarAAw_ZR0Gm3ObEvKNmVbfAw6Vl5aB8RaGoiLyhf3wPK"/>
+</div>
+<h4 class="font-headline font-bold text-sm uppercase">Acid-Wash Denim</h4>
+<p class="text-primary-container font-black text-lg mt-1">$160</p>
+</div>
+<!-- Rec 4 -->
+<div class="min-w-[280px] p-4 bg-surface-container border border-outline-variant/10 hover:border-primary-container transition-all group">
+<div class="aspect-square mb-4 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" data-alt="Premium black leather bucket hat with embossed brand logo on sleek dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbDEuRbeQUEtvIqbSKZ9cD_3fzvH8RkZQ7YzsfejC5fDpqA6N9WjsSE4U1-OR760j-idIEuOlPciJYUcCaVurpROJ_fo2b5VSVjHK4FoUs9_Q89Npd7SlLTYKwTALl2B-Kg7xo3IK9B0XOZQDW8HQEFwbzX_TxPErfYCjUx9TeKmuTjxg8fM2jJRbne0Z1iR44brdLsBfzO4N7kaTOKNm56IdMAU_P5DzxcEzT6l_fkCU4mfpcvhVuDoAGvYiQOVYLx9z-Syf07W1e"/>
+</div>
+<h4 class="font-headline font-bold text-sm uppercase">Noir Bucket Hat</h4>
+<p class="text-primary-container font-black text-lg mt-1">$55</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-neutral-950 w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="space-y-6">
+<a class="text-xl font-bold text-white font-headline uppercase tracking-tighter" href="#">UrbanVibe</a>
+<p class="text-neutral-500 text-xs leading-relaxed max-w-xs uppercase tracking-widest font-body">Defining the future of street-ready aesthetics through kinetic design and noir philosophy.</p>
+</div>
+<div>
+<h4 class="text-white font-headline font-black uppercase text-sm mb-6 tracking-widest">Support</h4>
+<div class="flex flex-col gap-4">
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">FAQ</a>
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Shipping</a>
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Returns</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-headline font-black uppercase text-sm mb-6 tracking-widest">Company</h4>
+<div class="flex flex-col gap-4">
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">About</a>
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Sustainability</a>
+<a class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest hover:text-[#bc13fe] underline-offset-4 hover:underline opacity-80 hover:opacity-100 transition-all" href="#">Careers</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-headline font-black uppercase text-sm mb-6 tracking-widest">Newsletter</h4>
+<div class="space-y-4">
+<p class="text-neutral-500 text-[10px] uppercase tracking-widest">Join the collective. Get early access.</p>
+<div class="flex">
+<input class="bg-surface-container border-none focus:ring-1 focus:ring-primary-container text-xs w-full py-3 px-4 uppercase tracking-widest" placeholder="EMAIL ADDRESS" type="email"/>
+<button class="bg-primary-container px-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+<span class="text-neutral-500 font-['Inter'] text-[10px] uppercase tracking-[0.3em]">© 2024 URBANVIBE. KINETIC NOIR DIRECTIVE.</span>
+<div class="flex gap-8">
+<a class="text-neutral-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined text-xl">share</span></a>
+<a class="text-neutral-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined text-xl">public</span></a>
+<a class="text-neutral-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined text-xl">brand_awareness</span></a>
+</div>
+</div>
+</footer>
+<script>
+  (function () {
+    const ROUTES = {
+      home: "/",
+      products: "/products",
+      cart: "/cart",
+      checkout: "/checkout",
+      login: "/login",
+      profile: "/profile"
+    };
+
+    function go(path) {
+      window.location.href = path;
+    }
+
+    function routeFromLabel(label) {
+      const t = (label || "").toLowerCase().trim();
+      if (!t) return null;
+      if (t.includes("urbanvibe") || t.includes("home")) return ROUTES.home;
+      if (t.includes("new drops") || t.includes("men") || t.includes("women") || t.includes("accessories")) return ROUTES.products;
+      if (t.includes("shop the drop") || t.includes("lookbook") || t.includes("view all") || t.includes("browse collection")) return ROUTES.products;
+      if (t.includes("add to bag") || t.includes("quick add")) return ROUTES.cart;
+      if (t.includes("proceed to checkout")) return ROUTES.checkout;
+      if (t.includes("complete order")) return ROUTES.profile;
+      if (t.includes("login") || t.includes("register")) return ROUTES.login;
+      if (t.includes("profile") || t.includes("account")) return ROUTES.profile;
+      return null;
+    }
+
+    document.querySelectorAll("a").forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      const target = routeFromLabel(a.textContent) || routeFromLabel(a.getAttribute("aria-label"));
+      if (href === "#" && target) {
+        a.setAttribute("href", target);
+      }
+    });
+
+    document.querySelectorAll("button").forEach((btn) => {
+      const icon = (btn.querySelector(".material-symbols-outlined") || {}).textContent || "";
+      if (icon.includes("shopping_bag")) btn.addEventListener("click", () => go(ROUTES.cart));
+      if (icon.includes("person")) btn.addEventListener("click", () => go(ROUTES.profile));
+
+      const target = routeFromLabel(btn.textContent);
+      if (target) {
+        btn.addEventListener("click", () => go(target));
+      }
+    });
+
+    document.querySelectorAll("form").forEach((form) => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        go(ROUTES.home);
+      });
+    });
+  })();
+</script>
+</body></html>

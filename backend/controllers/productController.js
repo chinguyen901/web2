@@ -1,6 +1,5 @@
 const { z } = require("zod");
-const connectDB = require("../lib/db");
-const Product = require("../models/Product");
+const prisma = require("../lib/prisma");
 const ApiError = require("../utils/apiError");
 const validate = require("../middleware/validate");
 
@@ -16,35 +15,43 @@ const productSchema = z.object({
 });
 
 async function createProduct(req, res) {
-  await connectDB();
   const body = validate(productSchema, req.body);
-  const product = await Product.create(body);
+  const product = await prisma.product.create({
+    data: {
+      ...body,
+      price: body.price,
+      rating: body.rating
+    }
+  });
   return res.status(201).json({ success: true, product });
 }
 
 async function getProducts(req, res) {
-  await connectDB();
-
   const page = Math.max(Number(req.query.page || 1), 1);
   const limit = Math.min(Math.max(Number(req.query.limit || 12), 1), 100);
   const skip = (page - 1) * limit;
 
-  const query = {};
+  const where = {};
   if (req.query.search) {
-    query.name = { $regex: req.query.search, $options: "i" };
+    where.name = { contains: String(req.query.search), mode: "insensitive" };
   }
   if (req.query.category) {
-    query.category = req.query.category;
+    where.category = String(req.query.category);
   }
   if (req.query.minPrice || req.query.maxPrice) {
-    query.price = {};
-    if (req.query.minPrice) query.price.$gte = Number(req.query.minPrice);
-    if (req.query.maxPrice) query.price.$lte = Number(req.query.maxPrice);
+    where.price = {};
+    if (req.query.minPrice) where.price.gte = Number(req.query.minPrice);
+    if (req.query.maxPrice) where.price.lte = Number(req.query.maxPrice);
   }
 
   const [products, total] = await Promise.all([
-    Product.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit),
-    Product.countDocuments(query)
+    prisma.product.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit
+    }),
+    prisma.product.count({ where })
   ]);
 
   return res.status(200).json({
@@ -60,27 +67,34 @@ async function getProducts(req, res) {
 }
 
 async function getProductById(req, res) {
-  await connectDB();
-  const product = await Product.findById(req.query.id);
-  if (!product) throw new ApiError("Product not found.", 404);
-  return res.status(200).json({ success: true, product });
-}
-
-async function updateProduct(req, res) {
-  await connectDB();
-  const body = validate(productSchema.partial(), req.body);
-  const product = await Product.findByIdAndUpdate(req.query.id, body, {
-    new: true,
-    runValidators: true
+  const product = await prisma.product.findUnique({
+    where: { id: String(req.query.id) }
   });
   if (!product) throw new ApiError("Product not found.", 404);
   return res.status(200).json({ success: true, product });
 }
 
+async function updateProduct(req, res) {
+  const body = validate(productSchema.partial(), req.body);
+  const exists = await prisma.product.findUnique({
+    where: { id: String(req.query.id) },
+    select: { id: true }
+  });
+  if (!exists) throw new ApiError("Product not found.", 404);
+  const product = await prisma.product.update({
+    where: { id: String(req.query.id) },
+    data: body
+  });
+  return res.status(200).json({ success: true, product });
+}
+
 async function deleteProduct(req, res) {
-  await connectDB();
-  const product = await Product.findByIdAndDelete(req.query.id);
-  if (!product) throw new ApiError("Product not found.", 404);
+  const exists = await prisma.product.findUnique({
+    where: { id: String(req.query.id) },
+    select: { id: true }
+  });
+  if (!exists) throw new ApiError("Product not found.", 404);
+  await prisma.product.delete({ where: { id: String(req.query.id) } });
   return res.status(200).json({ success: true, message: "Product deleted." });
 }
 

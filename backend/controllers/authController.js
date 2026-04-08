@@ -1,8 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
-const connectDB = require("../lib/db");
-const User = require("../models/User");
+const prisma = require("../lib/prisma");
 const ApiError = require("../utils/apiError");
 const validate = require("../middleware/validate");
 
@@ -27,42 +26,42 @@ function signToken(userId) {
 }
 
 async function register(req, res) {
-  await connectDB();
   const body = validate(registerSchema, req.body);
 
-  const existingUser = await User.findOne({ email: body.email });
+  const existingUser = await prisma.user.findUnique({ where: { email: body.email } });
   if (existingUser) throw new ApiError("Email already registered.", 409);
 
   const hashedPassword = await bcrypt.hash(body.password, 12);
-  const user = await User.create({
-    name: body.name,
-    email: body.email,
-    password: hashedPassword
+  const user = await prisma.user.create({
+    data: {
+      name: body.name,
+      email: body.email,
+      password: hashedPassword
+    }
   });
 
-  const token = signToken(user._id.toString());
+  const token = signToken(user.id);
   return res.status(201).json({
     success: true,
     token,
-    user: { id: user._id, name: user.name, email: user.email }
+    user: { id: user.id, name: user.name, email: user.email }
   });
 }
 
 async function login(req, res) {
-  await connectDB();
   const body = validate(loginSchema, req.body);
 
-  const user = await User.findOne({ email: body.email });
+  const user = await prisma.user.findUnique({ where: { email: body.email } });
   if (!user) throw new ApiError("Invalid email or password.", 401);
 
   const isMatch = await bcrypt.compare(body.password, user.password);
   if (!isMatch) throw new ApiError("Invalid email or password.", 401);
 
-  const token = signToken(user._id.toString());
+  const token = signToken(user.id);
   return res.status(200).json({
     success: true,
     token,
-    user: { id: user._id, name: user.name, email: user.email }
+    user: { id: user.id, name: user.name, email: user.email }
   });
 }
 

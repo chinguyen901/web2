@@ -1,6 +1,8 @@
-# Streetwear E-commerce API (Next.js + MongoDB + Stripe)
+# Streetwear Fullstack App (Next.js + Neon Postgres + Stripe)
 
-Production-style REST API using **Next.js API Routes** (Node.js), **Mongoose**, **JWT**, and **Stripe (test mode)** for Visa/card payments.
+Production-style fullstack app on a single Next.js deployment:
+- UI pages (static HTML from `public/ui` mapped to friendly routes)
+- REST API under `/api/*` with JWT auth and Stripe (test mode) for Visa/card payments.
 
 ## Folder structure
 
@@ -9,7 +11,7 @@ backend/
 ├── controllers/       # Business logic (auth, products, cart, orders, payment)
 ├── lib/               # DB + Stripe clients
 ├── middleware/        # auth, CORS, validation helper
-├── models/            # Mongoose schemas
+├── prisma/            # Prisma schema / migrations
 ├── pages/
 │   ├── api/           # REST endpoints
 │   ├── _app.js
@@ -29,15 +31,24 @@ backend/
 2. `cd backend`
 3. `cp .env.example .env` and fill values (see below).
 4. `npm install`
-5. `npm run dev` → API at `http://localhost:3000`
+5. `npm run prisma:generate`
+6. `npm run prisma:migrate -- --name init`
+7. `npm run dev` → UI + API at `http://localhost:3000`
 
-Smoke check: `GET /api/health`
+Smoke checks:
+- UI: `GET /`, `GET /products`, `GET /cart`, `GET /checkout`
+- API: `GET /api/health`
 
 ## Environment variables
 
 | Variable | Purpose |
 |----------|---------|
-| `MONGODB_URI` | MongoDB Atlas connection string |
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `POSTGRES_URL` | Neon pooled URL |
+| `POSTGRES_URL_NON_POOLING` | Neon non-pooling URL |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_HOST` / `POSTGRES_DATABASE` | Neon DB credentials |
+| `PGHOST` / `PGHOST_UNPOOLED` / `PGUSER` / `PGDATABASE` / `PGPASSWORD` | PG-compatible envs |
+| `NEON_PROJECT_ID` | Neon project id |
 | `JWT_SECRET` | Strong secret for signing JWTs |
 | `JWT_EXPIRES_IN` | Optional, default `7d` |
 | `STRIPE_SECRET_KEY` | Stripe **secret** key (`sk_test_...`) |
@@ -111,7 +122,7 @@ Visa and other brands are exercised through Stripe’s test cards; the API uses 
 sequenceDiagram
   participant C as Client (frontend)
   participant A as Next API
-  participant D as MongoDB
+  participant D as Neon Postgres
   participant S as Stripe
 
   C->>A: POST /api/orders (JWT)
@@ -131,14 +142,12 @@ sequenceDiagram
 - After `create-intent`, use **Stripe.js** with the returned `clientSecret`.
 - Pass `return_url` / handling as needed; you can point `return_url` at `GET https://<api>/api/payment/success` so the API redirects to `FRONTEND_URL/checkout/success`.
 
-## MongoDB Atlas (database)
+## Neon database
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas) and create a free **M0** cluster.
-2. **Database Access** → create a user (username + password).
-3. **Network Access** → **Add IP Address**:
-   - For Vercel/serverless, use **`0.0.0.0/0`** (open) for development, or tighten using Atlas/Vercel guidance for production.
-4. **Connect** → Drivers → copy the **connection string**, replace `<password>`, set DB name in URI or rely on code (`dbName: "streetwear"` in `lib/db.js`).
-5. Put the string in `MONGODB_URI` in `.env` and on Vercel.
+1. Create a Neon project at [neon.tech](https://neon.tech).
+2. Create database/user and copy `DATABASE_URL`.
+3. Add `DATABASE_URL` + `POSTGRES_*` / `PG*` env vars to local `.env` and Vercel.
+4. Redeploy after env updates.
 
 ## Seed 2000–3000 products
 
@@ -150,7 +159,7 @@ npm run seed
 SEED_COUNT=3000 node scripts/seedProducts.js
 ```
 
-Indexes on `Product` (`name`, `category`, compound `category+price`, text on `name`) keep listing/search responsive for a few thousand SKUs.
+For product catalog scale (2k–3k SKUs), ensure indexes exist on product `name`, `category`, and `(category, price)` in your Neon/Postgres schema.
 
 ## Stripe setup (test mode)
 
@@ -172,7 +181,7 @@ Indexes on `Product` (`name`, `category`, compound `category+price`, text on `na
 3. Set **Root Directory** to `backend` (if the repo contains other folders).
 4. Framework: **Next.js** (auto-detected).
 5. **Environment Variables** — add all variables from `.env.example` (production values):
-   - `MONGODB_URI`, `JWT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+   - `DATABASE_URL`, `JWT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
    - `FRONTEND_URL` = your deployed frontend URL (e.g. `https://shop.example.com`)
    - `NEXT_PUBLIC_BASE_URL` = your Vercel API URL (e.g. `https://your-api.vercel.app`)
 6. **Deploy**.
@@ -188,14 +197,14 @@ Indexes on `Product` (`name`, `category`, compound `category+price`, text on `na
 - **Zod** validation on inputs; errors return `400` with messages.
 - **JWT** on cart, orders, payment intent, and product mutations.
 - **Global error wrapper** via `catchAsync` on routes.
-- **Mongoose indexes** for product listing at 2k–3k documents; **pagination** caps (`limit` max 100 for products, 50 for orders).
+- Database indexes for product listing at 2k–3k SKUs; pagination caps (`limit` max 100 for products, 50 for orders).
 - Stripe webhook verifies **signature** using the **raw** body (`bodyParser: false` on `pages/api/payment/webhook.js`).
 
 ## Troubleshooting
 
 - **Webhook 400 / signature invalid:** Ensure nothing parses the body before Stripe’s verifier; keep `bodyParser: false` on the webhook route and use the correct `STRIPE_WEBHOOK_SECRET` for that endpoint (CLI secret vs Dashboard secret differ).
 - **CORS errors:** Set `FRONTEND_URL` exactly to the browser origin (scheme + host + port).
-- **Mongo timeout:** Check Atlas IP allowlist and URI credentials.
+- **Database timeout:** Verify Neon connection string, SSL mode, and Vercel env values.
 
 ## License
 

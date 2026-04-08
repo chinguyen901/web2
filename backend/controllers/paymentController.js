@@ -1,7 +1,5 @@
 const { z } = require("zod");
-const mongoose = require("mongoose");
-const connectDB = require("../lib/db");
-const Order = require("../models/Order");
+const prisma = require("../lib/prisma");
 const getStripe = require("../lib/stripe");
 const ApiError = require("../utils/apiError");
 const validate = require("../middleware/validate");
@@ -15,16 +13,9 @@ const createIntentSchema = z.object({
  * Amount is taken from order.total (USD, converted to smallest currency unit).
  */
 async function createPaymentIntent(req, res) {
-  await connectDB();
   const body = validate(createIntentSchema, req.body);
-
-  if (!mongoose.Types.ObjectId.isValid(body.orderId)) {
-    throw new ApiError("Invalid order id.", 400);
-  }
-
-  const order = await Order.findOne({
-    _id: body.orderId,
-    user: req.user._id
+  const order = await prisma.order.findFirst({
+    where: { id: body.orderId, userId: req.user.id }
   });
 
   if (!order) throw new ApiError("Order not found.", 404);
@@ -32,7 +23,7 @@ async function createPaymentIntent(req, res) {
     throw new ApiError("Order already paid.", 400);
   }
 
-  const amountCents = Math.round(order.total * 100);
+  const amountCents = Math.round(Number(order.total) * 100);
   if (amountCents < 50) {
     throw new ApiError("Order total too small for Stripe.", 400);
   }
@@ -43,21 +34,25 @@ async function createPaymentIntent(req, res) {
     currency: "usd",
     automatic_payment_methods: { enabled: true },
     metadata: {
-      orderId: order._id.toString(),
-      userId: req.user._id.toString()
+      orderId: order.id,
+      userId: req.user.id
     },
-    description: `Streetwear order ${order._id}`
+    description: `Streetwear order ${order.id}`
   });
 
-  order.paymentIntentId = paymentIntent.id;
-  order.paymentStatus = "pending";
-  await order.save();
+  await prisma.order.update({
+    where: { id: order.id },
+    data: {
+      paymentIntentId: paymentIntent.id,
+      paymentStatus: "pending"
+    }
+  });
 
   return res.status(200).json({
     success: true,
     clientSecret: paymentIntent.client_secret,
     paymentIntentId: paymentIntent.id,
-    orderId: order._id.toString()
+    orderId: order.id
   });
 }
 
@@ -66,7 +61,6 @@ async function createPaymentIntent(req, res) {
  * Stripe may append payment_intent / payment_intent_client_secret as query params.
  */
 async function paymentSuccess(req, res) {
-  await connectDB();
   const paymentIntentId =
     req.query.payment_intent || req.query.payment_intent_client_secret;
 

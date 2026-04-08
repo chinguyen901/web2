@@ -1,11 +1,8 @@
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/apiError");
-const User = require("../models/User");
-const connectDB = require("../lib/db");
+const prisma = require("../lib/prisma");
 
 async function protect(req) {
-  await connectDB();
-
   const authHeader = req.headers.authorization || "";
   const token = authHeader.startsWith("Bearer ")
     ? authHeader.split(" ")[1]
@@ -20,7 +17,10 @@ async function protect(req) {
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById(decoded.id).select("-password");
+  const user = await prisma.user.findUnique({
+    where: { id: decoded.id },
+    select: { id: true, name: true, email: true, createdAt: true, updatedAt: true }
+  });
 
   if (!user) {
     throw new ApiError("User not found.", 401);
