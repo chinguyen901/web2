@@ -135,10 +135,10 @@
 </div>
 <!-- Toggle Navigation -->
 <div class="flex w-full bg-surface-container-low p-1 relative">
-<button class="flex-1 py-3 text-sm font-bold uppercase tracking-widest text-on-primary-container bg-primary-container z-10 transition-all duration-300">
+<button id="mode-login" type="button" class="flex-1 py-3 text-sm font-bold uppercase tracking-widest text-on-primary-container bg-primary-container z-10 transition-all duration-300">
                         Login
                     </button>
-<button class="flex-1 py-3 text-sm font-bold uppercase tracking-widest text-secondary hover:text-white transition-all duration-300">
+<button id="mode-register" type="button" class="flex-1 py-3 text-sm font-bold uppercase tracking-widest text-secondary hover:text-white transition-all duration-300">
                         Register
                     </button>
 </div>
@@ -146,17 +146,21 @@
 <form class="space-y-6">
 <div class="space-y-4">
 <div class="group">
-<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2 group-focus-within:text-primary-container transition-colors">Digital Identity / Email</label>
-<input class="w-full bg-surface-container border-b border-white/10 px-0 py-4 text-white placeholder:text-surface-container-highest font-mono text-sm focus:border-primary-container transition-all" placeholder="ACCESS_ID@URBANVIBE.COM" type="email"/>
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2 group-focus-within:text-primary-container transition-colors">Username</label>
+<input id="auth-username" class="w-full bg-surface-container border-b border-white/10 px-0 py-4 text-white placeholder:text-surface-container-highest font-mono text-sm focus:border-primary-container transition-all" placeholder="urban_user_01" type="text"/>
 </div>
 <div class="group">
 <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2 group-focus-within:text-primary-container transition-colors">Encryption Key / Password</label>
 <div class="relative">
-<input class="w-full bg-surface-container border-b border-white/10 px-0 py-4 text-white placeholder:text-surface-container-highest font-mono text-sm focus:border-primary-container transition-all" placeholder="••••••••••••" type="password"/>
+<input id="auth-password" class="w-full bg-surface-container border-b border-white/10 px-0 py-4 text-white placeholder:text-surface-container-highest font-mono text-sm focus:border-primary-container transition-all" placeholder="••••••••••••" type="password"/>
 <button class="absolute right-0 top-1/2 -translate-y-1/2 text-secondary hover:text-primary-container" type="button">
 <span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
 </button>
 </div>
+</div>
+<div id="confirm-password-wrap" class="group hidden">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mb-2 group-focus-within:text-primary-container transition-colors">Confirm Password</label>
+<input id="auth-confirm-password" class="w-full bg-surface-container border-b border-white/10 px-0 py-4 text-white placeholder:text-surface-container-highest font-mono text-sm focus:border-primary-container transition-all" placeholder="••••••••••••" type="password"/>
 </div>
 </div>
 <div class="flex items-center justify-between">
@@ -289,29 +293,74 @@
     });
 
     const form = document.querySelector("form");
-    const inputs = form ? form.querySelectorAll("input") : [];
-    const emailInput = inputs[0];
-    const passwordInput = inputs[1];
-    const toggleButtons = Array.from(document.querySelectorAll("button")).filter((b) => {
-      const t = (b.textContent || "").toLowerCase();
-      return t.includes("login") || t.includes("register");
-    });
+    const usernameInput = document.getElementById("auth-username");
+    const passwordInput = document.getElementById("auth-password");
+    const confirmWrap = document.getElementById("confirm-password-wrap");
+    const confirmPasswordInput = document.getElementById("auth-confirm-password");
+    const loginModeBtn = document.getElementById("mode-login");
+    const registerModeBtn = document.getElementById("mode-register");
+    const submitBtn = form ? form.querySelector("button[type='submit']") : null;
     let mode = "login";
 
-    toggleButtons.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const t = (btn.textContent || "").toLowerCase();
-        mode = t.includes("register") ? "register" : "login";
+    function normalizeUserToEmail(username) {
+      const value = (username || "").trim().toLowerCase();
+      if (!value) return "";
+      return value.includes("@") ? value : value + "@urbanvibe.local";
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      if (!loginModeBtn || !registerModeBtn) return;
+
+      const loginActiveClasses =
+        "bg-primary-container text-on-primary-container";
+      const registerActiveClasses =
+        "bg-primary-container text-on-primary-container";
+
+      loginModeBtn.classList.remove("bg-primary-container", "text-on-primary-container");
+      loginModeBtn.classList.add("text-secondary");
+      registerModeBtn.classList.remove("bg-primary-container", "text-on-primary-container");
+      registerModeBtn.classList.add("text-secondary");
+
+      if (mode === "login") {
+        loginModeBtn.classList.add(...loginActiveClasses.split(" "));
+        if (confirmWrap) confirmWrap.classList.add("hidden");
+        if (submitBtn) submitBtn.textContent = "Execute Authentication";
+      } else {
+        registerModeBtn.classList.add(...registerActiveClasses.split(" "));
+        if (confirmWrap) confirmWrap.classList.remove("hidden");
+        if (submitBtn) submitBtn.textContent = "Create Account";
+      }
+    }
+
+    if (loginModeBtn) {
+      loginModeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        setMode("login");
       });
-    });
+    }
+    if (registerModeBtn) {
+      registerModeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        setMode("register");
+      });
+    }
+    setMode("login");
 
     if (form) {
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
-        const email = (emailInput?.value || "").trim().toLowerCase();
+        const username = (usernameInput?.value || "").trim();
         const password = (passwordInput?.value || "").trim();
-        if (!email || !password) {
-          alert("Vui long nhap email va password.");
+        const confirmPassword = (confirmPasswordInput?.value || "").trim();
+        const email = normalizeUserToEmail(username);
+
+        if (!username || !password) {
+          alert("Vui long nhap username va password.");
+          return;
+        }
+        if (mode === "register" && password !== confirmPassword) {
+          alert("Confirm password khong khop.");
           return;
         }
 
@@ -320,7 +369,7 @@
         const payload =
           mode === "register"
             ? {
-                name: email.split("@")[0] || "Urban User",
+                name: username || "Urban User",
                 email,
                 password
               }
