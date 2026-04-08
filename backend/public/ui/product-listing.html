@@ -418,17 +418,28 @@
 </footer>
 <script>
   (function () {
+    const PAGE_TYPE = "protected";
     const ROUTES = {
-      home: "/",
+      home: "/homepage",
       products: "/products",
       cart: "/cart",
       checkout: "/checkout",
       login: "/login",
       profile: "/profile"
     };
+    const SESSION_KEY = "uv_session";
 
     function go(path) {
       window.location.href = path;
+    }
+
+    function isLoggedIn() {
+      return Boolean(localStorage.getItem(SESSION_KEY));
+    }
+
+    if (PAGE_TYPE !== "login" && !isLoggedIn()) {
+      go(ROUTES.login);
+      return;
     }
 
     function routeFromLabel(label) {

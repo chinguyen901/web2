@@ -230,17 +230,29 @@
 </footer>
 <script>
   (function () {
+    const PAGE_TYPE = "login";
     const ROUTES = {
-      home: "/",
+      home: "/homepage",
       products: "/products",
       cart: "/cart",
       checkout: "/checkout",
       login: "/login",
       profile: "/profile"
     };
+    const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
 
     function go(path) {
       window.location.href = path;
+    }
+
+    function isLoggedIn() {
+      return Boolean(localStorage.getItem(SESSION_KEY));
+    }
+
+    if (PAGE_TYPE === "login" && isLoggedIn()) {
+      go(ROUTES.home);
+      return;
     }
 
     function routeFromLabel(label) {
@@ -252,7 +264,6 @@
       if (t.includes("add to bag") || t.includes("quick add")) return ROUTES.cart;
       if (t.includes("proceed to checkout")) return ROUTES.checkout;
       if (t.includes("complete order")) return ROUTES.profile;
-      if (t.includes("login") || t.includes("register") || t.includes("execute authentication")) return ROUTES.home;
       if (t.includes("profile") || t.includes("account")) return ROUTES.profile;
       return null;
     }
@@ -270,18 +281,81 @@
       if (icon.includes("shopping_bag")) btn.addEventListener("click", () => go(ROUTES.cart));
       if (icon.includes("person")) btn.addEventListener("click", () => go(ROUTES.profile));
 
+      if (btn.type === "submit") return;
       const target = routeFromLabel(btn.textContent);
       if (target) {
         btn.addEventListener("click", () => go(target));
       }
     });
 
-    document.querySelectorAll("form").forEach((form) => {
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        go(ROUTES.home);
+    const form = document.querySelector("form");
+    const inputs = form ? form.querySelectorAll("input") : [];
+    const emailInput = inputs[0];
+    const passwordInput = inputs[1];
+    const toggleButtons = Array.from(document.querySelectorAll("button")).filter((b) => {
+      const t = (b.textContent || "").toLowerCase();
+      return t.includes("login") || t.includes("register");
+    });
+    let mode = "login";
+
+    toggleButtons.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const t = (btn.textContent || "").toLowerCase();
+        mode = t.includes("register") ? "register" : "login";
       });
     });
+
+    if (form) {
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const email = (emailInput?.value || "").trim().toLowerCase();
+        const password = (passwordInput?.value || "").trim();
+        if (!email || !password) {
+          alert("Vui long nhap email va password.");
+          return;
+        }
+
+        const endpoint =
+          mode === "register" ? "/api/auth/register" : "/api/auth/login";
+        const payload =
+          mode === "register"
+            ? {
+                name: email.split("@")[0] || "Urban User",
+                email,
+                password
+              }
+            : { email, password };
+
+        let response;
+        let data;
+        try {
+          response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          data = await response.json();
+        } catch (_err) {
+          alert("Khong the ket noi den server, vui long thu lai.");
+          return;
+        }
+
+        if (!response.ok || !data?.success || !data?.token) {
+          alert(data?.message || "Dang nhap/dang ky that bai.");
+          return;
+        }
+
+        localStorage.setItem(
+          SESSION_KEY,
+          JSON.stringify({ email: data.user.email, loginAt: new Date().toISOString() })
+        );
+        localStorage.setItem(
+          AUTH_KEY,
+          JSON.stringify({ token: data.token, user: data.user })
+        );
+        go(ROUTES.home);
+      });
+    }
   })();
 </script>
 </body></html>

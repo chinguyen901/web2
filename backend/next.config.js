@@ -4,7 +4,7 @@ const nextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
-        { source: "/", destination: "/ui/homepage.html" },
+        { source: "/", destination: "/ui/login-register.html" },
         { source: "/homepage", destination: "/ui/homepage.html" },
         { source: "/products", destination: "/ui/product-listing.html" },
         { source: "/product/:id", destination: "/ui/product-detail.html" },
