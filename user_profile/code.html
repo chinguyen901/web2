@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UrbanVibe | User Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#e2e2e2",
+                    "surface-container-highest": "#353535",
+                    "secondary": "#c6c6c7",
+                    "surface-bright": "#393939",
+                    "on-primary-fixed-variant": "#74009f",
+                    "on-primary": "#520072",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-tertiary": "#472a00",
+                    "on-surface": "#e2e2e2",
+                    "surface-dim": "#131313",
+                    "tertiary": "#ffb960",
+                    "surface-container-low": "#1b1b1b",
+                    "tertiary-container": "#a76900",
+                    "surface-tint": "#ebb2ff",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-primary-fixed": "#320047",
+                    "secondary-container": "#454747",
+                    "on-error": "#690005",
+                    "surface": "#131313",
+                    "inverse-primary": "#9800d0",
+                    "surface-variant": "#353535",
+                    "surface-container": "#1f1f1f",
+                    "inverse-surface": "#e2e2e2",
+                    "outline-variant": "#504254",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-high": "#2a2a2a",
+                    "primary-container": "#bc13fe",
+                    "background": "#131313",
+                    "primary-fixed": "#f8d8ff",
+                    "on-secondary-container": "#b4b5b5",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#ebb2ff",
+                    "on-secondary-fixed-variant": "#454747",
+                    "on-primary-container": "#ffffff",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb960",
+                    "on-tertiary-fixed": "#2b1700",
+                    "on-tertiary-container": "#ffffff",
+                    "on-background": "#e2e2e2",
+                    "on-secondary": "#2f3131",
+                    "primary": "#ebb2ff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-surface-variant": "#d4c0d7",
+                    "tertiary-fixed": "#ffddb8",
+                    "outline": "#9d8ba0",
+                    "inverse-on-surface": "#303030"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.0rem",
+                    "lg": "0.0rem",
+                    "xl": "0.0rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+        }
+        .neon-glow {
+            box-shadow: 0 0 40px -10px rgba(188, 19, 254, 0.2);
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .kinetic-border {
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .kinetic-border:hover {
+            border-color: #bc13fe;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-neutral-900/70 backdrop-blur-xl border-b border-white/10">
+<div class="text-2xl font-black tracking-tighter text-white font-['Space_Grotesk'] uppercase">UrbanVibe</div>
+<div class="hidden md:flex gap-8 items-center font-['Space_Grotesk'] tracking-tighter uppercase">
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">New Drops</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Men</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Women</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Accessories</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="scale-95 active:scale-90 transition-transform text-neutral-400 hover:text-[#bc13fe]">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<button class="scale-95 active:scale-90 transition-transform text-neutral-400 hover:text-[#bc13fe]">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<!-- Active Navigation state for Profile -->
+<button class="scale-95 active:scale-90 transition-transform text-[#bc13fe] border-b-2 border-[#bc13fe] pb-1">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+</button>
+</div>
+</nav>
+<main class="pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto min-h-screen">
+<!-- Header: Profile Identity -->
+<header class="mb-12 flex flex-col md:flex-row items-start md:items-end gap-8">
+<div class="relative group">
+<div class="w-32 h-32 md:w-40 md:h-40 bg-surface-container-high overflow-hidden border border-primary-container/20 ring-4 ring-primary-container/5">
+<img alt="User Profile" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Close-up portrait of a young man with sharp features and urban streetwear aesthetic in cinematic neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEtJGJWXAYh1tsoZdq8DtqmT2_ZJV5EdiWD_295VA-mRiLis7ThL8JSS6Fow2qtkKlchb7RV1oNyvEMvoB-Jo1eZ6PYo_bqPiqyAb3aI9NyPTQl4bqi3dm1N_b1Zq_i1Qf-JJfSPIie4E49qHJX9DKt0vDqnIvDlGgih2EUMJ6PehtuFqRowhqQyK18_qu1K2GmeWLp63EB7j6C_7S3nY_K-uQ6pe_YtTe4RUyq21p0wpeK4_Zexm9IvrqcEoxsflA3A74m72hugGl"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary-container p-2 text-white">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex items-center gap-4">
+<h1 class="font-headline text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Marcus Thorne</h1>
+<span class="bg-surface-container-highest text-[10px] tracking-[0.2em] px-2 py-1 uppercase font-bold text-primary-container">PRO MEMBER</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 text-neutral-500 font-label uppercase text-xs tracking-widest">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span> Joined November 2023</span>
+<span class="hidden md:block">|</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span> Tokyo, Japan</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Account Settings: Side Panel -->
+<div class="md:col-span-4 space-y-6">
+<section class="bg-surface-container-low p-8 border-l-4 border-primary-container">
+<h2 class="font-headline text-xl font-bold uppercase tracking-tighter mb-6 text-white">Account Settings</h2>
+<nav class="space-y-4">
+<a class="flex items-center justify-between group p-3 bg-surface-container hover:bg-surface-container-high transition-all" href="#">
+<span class="font-label text-sm uppercase tracking-widest text-secondary-fixed group-hover:text-primary-container transition-colors">Security &amp; Login</span>
+<span class="material-symbols-outlined text-sm text-neutral-600" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between group p-3 bg-surface-container hover:bg-surface-container-high transition-all" href="#">
+<span class="font-label text-sm uppercase tracking-widest text-secondary-fixed group-hover:text-primary-container transition-colors">Shipping Addresses</span>
+<span class="material-symbols-outlined text-sm text-neutral-600" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between group p-3 bg-surface-container hover:bg-surface-container-high transition-all" href="#">
+<span class="font-label text-sm uppercase tracking-widest text-secondary-fixed group-hover:text-primary-container transition-colors">Payment Methods</span>
+<span class="material-symbols-outlined text-sm text-neutral-600" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between group p-3 bg-surface-container hover:bg-surface-container-high transition-all border border-primary-container/10" href="#">
+<span class="font-label text-sm uppercase tracking-widest text-primary-container font-bold">UrbanVibe Rewards</span>
+<span class="font-headline text-xs text-primary-container">2,450 PTS</span>
+</a>
+</nav>
+</section>
+<div class="bg-surface-container-highest p-8">
+<p class="font-label text-[10px] text-neutral-400 uppercase tracking-[0.3em] mb-2">Need Assistance?</p>
+<h3 class="font-headline text-lg font-bold text-white mb-4">Concierge Support</h3>
+<button class="w-full bg-transparent border border-outline-variant hover:border-primary-container text-white py-3 font-label text-xs uppercase tracking-widest transition-all">
+                        Contact Expert
+                    </button>
+</div>
+</div>
+<!-- Order History: Main Panel -->
+<div class="md:col-span-8 space-y-6">
+<section class="bg-surface-container p-8">
+<div class="flex justify-between items-baseline mb-8">
+<h2 class="font-headline text-2xl font-black uppercase tracking-tighter text-white">Order History</h2>
+<a class="text-[10px] font-label uppercase tracking-widest text-neutral-500 hover:text-primary-container transition-colors" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<!-- Order Item 1 -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-surface-container-low hover:bg-surface-container-high transition-colors items-center">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-highest">
+<img alt="Product" class="w-full h-full object-cover grayscale" data-alt="Detailed macro of a high-tech black sneaker with textured materials and reflective accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhR_Wsx0yJ8Vq-IqRrCFHtBXD10DZz5ghOjSCYH8YuDIBroGGsj5ECevKi-6il1yb1NSxS-VnGP50pIaACGuTt0t0_XBkd25kIV3KnK-IKYM3cwcprR5WwHB-5hCpX7lp_34ussJ4675O9F8X5sAzLRmG89OiLZe0Uny8urOJDPJY_Dm4G95wbWqwWYdz2jJpPGamBMXNB57CEDPeB3wPwKGVODxpz2FjVx0Np_4JfXWp1MaivOfSHvwADVxc6sZfdQJ8fh0uruGKz"/>
+</div>
+<div>
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-tighter">#UV-88291</p>
+<p class="font-label text-sm text-white uppercase font-bold tracking-tight">Kinetik Runner V1</p>
+</div>
+</div>
+<div class="text-left md:text-center">
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-widest">Date</p>
+<p class="text-sm text-secondary-fixed">Mar 12, 2024</p>
+</div>
+<div class="text-left md:text-center">
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-widest">Status</p>
+<span class="inline-block text-[10px] bg-primary-container/10 text-primary-container px-2 py-0.5 font-bold uppercase tracking-widest">Delivered</span>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-white">$240.00</p>
+</div>
+</div>
+<!-- Order Item 2 -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-surface-container-low hover:bg-surface-container-high transition-colors items-center opacity-80">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-highest">
+<img alt="Product" class="w-full h-full object-cover grayscale" data-alt="Folded heavy cotton oversized black hoodie with minimalist branding on a dark backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD4X7KWXFwiMyDQ8BqJutuMCcgYdNQ390OD6IBi_wyvih8_CGyP1wfQRLbHDYZWKXJXuR30H4IUD_WhB-m1JuIU16hEnQYj1v7zdpVdcayrc8lvrq4Bbdk0Y7RoZ8eCBBK6k41KEsbRJZLW_POrOYb-C8itkx7KA-Kra-5ijvgyDtAKe2euK3WUlUy3xvzjPk0Yu-GOgu_Q-BVQ7M8Tydm8OOUHHF4eG3Xe6Cdn4y8jqg3j8jtavUvhCQF-lwRACDSZbAJ4xNL8cpe"/>
+</div>
+<div>
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-tighter">#UV-88104</p>
+<p class="font-label text-sm text-white uppercase font-bold tracking-tight">Void Oversize Hoodie</p>
+</div>
+</div>
+<div class="text-left md:text-center">
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-widest">Date</p>
+<p class="text-sm text-secondary-fixed">Feb 24, 2024</p>
+</div>
+<div class="text-left md:text-center">
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-widest">Status</p>
+<span class="inline-block text-[10px] bg-neutral-800 text-neutral-400 px-2 py-0.5 font-bold uppercase tracking-widest">Archived</span>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-white">$155.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Wishlist Bento -->
+<section class="space-y-6">
+<div class="flex justify-between items-baseline">
+<h2 class="font-headline text-2xl font-black uppercase tracking-tighter text-white">Your Wishlist</h2>
+<span class="text-[10px] font-label uppercase tracking-widest text-primary-container">3 items saved</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="group relative bg-surface-container-lowest border border-transparent hover:border-primary-container transition-all">
+<div class="aspect-[4/5] bg-surface-container overflow-hidden">
+<img alt="Wishlist Item" class="w-full h-full object-cover grayscale group-hover:scale-110 transition-transform duration-700" data-alt="Sleek silver and white technical sneakers presented in an abstract minimal studio setting with harsh shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_WSm69mg_J8DVhNbESzn9rI1h6UFC1ythRj8e6_WWencn8pYl_2qgxvOOI4VksNz13fezh1mvy-rxCS92T737uyAJjktvPO7grzLAV3BqdLnYoTWkpXpzdr5AUuEt1oRpjGykMLBIGe8E-BjPQ8d2JXKkkPv26yALAFj96iwGiS1SBeqOwXln1lizHe1HW5ks35-fxBYNhzJFSGWIXoUOqJbrtiX5fsoUfQxXC0LtftgEi7G5p0fSqnf5CB8vS7IWy7mdzDj3aCGm"/>
+</div>
+<div class="p-6">
+<p class="text-[10px] font-label text-primary-container uppercase tracking-widest mb-1">New Arrival</p>
+<h3 class="font-headline text-lg font-bold text-white uppercase tracking-tighter">Chrome Ghost Runner</h3>
+<p class="font-headline text-xl text-neutral-400 mt-2">$310.00</p>
+</div>
+<button class="absolute top-4 right-4 bg-white text-black p-2 hover:bg-primary-container hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+<div class="group relative bg-surface-container-lowest border border-transparent hover:border-primary-container transition-all">
+<div class="aspect-[4/5] bg-surface-container overflow-hidden">
+<img alt="Wishlist Item" class="w-full h-full object-cover grayscale group-hover:scale-110 transition-transform duration-700" data-alt="High-quality black graphic t-shirt with subtle futuristic typography and premium fabric texture detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHmRVvBV5kNZUVecQXpl99uHZMvzosK_ettKVxLhbCIGdPSuBo0wFgNRIKkNcJDy2NTIxM6SYCz8-6V8sP0s6KJggRYLed1AUf5o_2m7mt9v_b3sz7aUn4JYUx-TfBcW5hfu8WKqcLCGfMccJ5ytlBp5hGFfWTEW9wPbTIwK7tqnPpJuIHq8vpkvG0v9M8zSm-KLM_Rv83ytveyb2oLk4JcZlDUcCzcIZlNpWYzKeVJncaxefLQ89GEVvDdvgD8Htwar8qbd_PpsB1"/>
+</div>
+<div class="p-6">
+<p class="text-[10px] font-label text-neutral-500 uppercase tracking-widest mb-1">Limited Stock</p>
+<h3 class="font-headline text-lg font-bold text-white uppercase tracking-tighter">Cyber-Print Heavy Tee</h3>
+<p class="font-headline text-xl text-neutral-400 mt-2">$85.00</p>
+</div>
+<button class="absolute top-4 right-4 bg-white text-black p-2 hover:bg-primary-container hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="text-xl font-bold text-white font-['Space_Grotesk'] tracking-tighter uppercase mb-6">URBANVIBE</div>
+<p class="text-neutral-500 font-['Inter'] text-sm uppercase tracking-widest leading-relaxed">
+                    Redefining the metropolitan aesthetic through kinetic design and brutalist architecture.
+                </p>
+</div>
+<div class="col-span-1">
+<h4 class="text-white font-headline font-bold uppercase tracking-tighter mb-6">Explore</h4>
+<ul class="space-y-4 font-['Inter'] text-sm uppercase tracking-widest">
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">About</a></li>
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">Newsletter</a></li>
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="text-white font-headline font-bold uppercase tracking-tighter mb-6">Support</h4>
+<ul class="space-y-4 font-['Inter'] text-sm uppercase tracking-widest">
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">FAQ</a></li>
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">Shipping</a></li>
+<li><a class="text-neutral-500 hover:text-[#bc13fe] underline-offset-4 hover:underline transition-all" href="#">Terms</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="text-white font-headline font-bold uppercase tracking-tighter mb-6">Connect</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:border-[#bc13fe] hover:text-[#bc13fe] transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</a>
+<a class="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:border-[#bc13fe] hover:text-[#bc13fe] transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="camera">camera</span>
+</a>
+</div>
+<div class="mt-8">
+<p class="text-[10px] text-neutral-500 font-label uppercase tracking-[0.2em]">© 2024 URBANVIBE. KINETIC NOIR DIRECTIVE.</p>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

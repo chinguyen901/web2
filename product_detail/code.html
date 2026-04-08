@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "secondary": "#c6c6c7",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed-variant": "#74009f",
+                        "on-primary": "#520072",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-tertiary": "#472a00",
+                        "on-surface": "#e2e2e2",
+                        "surface-dim": "#131313",
+                        "tertiary": "#ffb960",
+                        "surface-container-low": "#1b1b1b",
+                        "tertiary-container": "#a76900",
+                        "surface-tint": "#ebb2ff",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-primary-fixed": "#320047",
+                        "secondary-container": "#454747",
+                        "on-error": "#690005",
+                        "surface": "#131313",
+                        "inverse-primary": "#9800d0",
+                        "surface-variant": "#353535",
+                        "surface-container": "#1f1f1f",
+                        "inverse-surface": "#e2e2e2",
+                        "outline-variant": "#504254",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-container": "#bc13fe",
+                        "background": "#131313",
+                        "primary-fixed": "#f8d8ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#ebb2ff",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-container": "#ffffff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb960",
+                        "on-tertiary-fixed": "#2b1700",
+                        "on-tertiary-container": "#ffffff",
+                        "on-background": "#e2e2e2",
+                        "on-secondary": "#2f3131",
+                        "primary": "#ebb2ff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#d4c0d7",
+                        "tertiary-fixed": "#ffddb8",
+                        "outline": "#9d8ba0",
+                        "inverse-on-surface": "#303030"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 20px 2px rgba(188, 19, 254, 0.4);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #131313; }
+        ::-webkit-scrollbar-thumb { background: #bc13fe; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/70 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-8 h-20 w-full">
+<div class="text-2xl font-black tracking-tighter text-white font-headline uppercase">UrbanVibe</div>
+<div class="hidden md:flex items-center space-x-8 font-headline tracking-tighter uppercase text-sm">
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">New Drops</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Men</a>
+<a class="text-[#bc13fe] border-b-2 border-[#bc13fe] pb-1" href="#">Women</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Accessories</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="scale-95 active:scale-90 transition-transform text-neutral-400 hover:text-[#bc13fe]">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="scale-95 active:scale-90 transition-transform text-neutral-400 hover:text-[#bc13fe]">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+<button class="scale-95 active:scale-90 transition-transform text-neutral-400 hover:text-[#bc13fe]">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</nav>
+<main class="pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
+<!-- Breadcrumbs -->
+<nav class="flex items-center space-x-2 text-xs uppercase tracking-widest text-neutral-500 mb-8">
+<a class="hover:text-primary" href="#">Shop</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Women</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-white">Cyber-Punk Tech Jacket</span>
+</nav>
+<!-- Product Hero Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Gallery Grid -->
+<div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Thumbnails (Desktop) -->
+<div class="hidden md:flex md:col-span-2 flex-col space-y-4">
+<div class="aspect-[3/4] bg-surface-container-low cursor-pointer border border-transparent hover:border-primary-container transition-all">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" data-alt="Close up detail of high-tech water resistant fabric on a black tactical jacket with neon purple stitching" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaLUoySikXB6jSZJSu4w9vydJy0t_O99g9K5dHoI-kSXjzDzDKVm6H51MJ3v1lu2FWYcgbGWMEueX-eLi6ItUzlBEpXBG3apcLT_KNp5WePZVR4brAXtIqhisyfiaGBlp_2pn1LTD_aM9QhL7v_1eK5XZB5Gta8sGTUO434NTXUr9KOykKgM9p5PUAvhWZIqCzk5u-x0rspzD2AA-VTOA_v1-E56HrKfrf6U2NXp29nMwN_RYBi2F5HBs3j1NzdqSqrxuLVku_zs43"/>
+</div>
+<div class="aspect-[3/4] bg-surface-container-low cursor-pointer border border-primary-container transition-all">
+<img class="w-full h-full object-cover" data-alt="Side profile of a model wearing a futuristic oversized black jacket with glowing purple accents in a dark studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPEkUn2q5pPnZiLzRfTFqB6L0giNinddd_VEQ8CJx7dJE8mh4shyMqkxVHSzBsnyCDxLwOhiPZvWO8nNx6id3S-CsjuFEpu9IqBUmioHoQKpFgaEWNwtCXL2ethM8ccOgSXFOjgLEacjOOVzalZFYIIqBRufiYifD3VJeMJVp2iLwQ0U_JdrIizFOAqgMDJU3dtu_OtDxrmUT5puxvaSib3jy68G5Kcyte5fNVTNi1gZk-Ymb7ILSKuYJWB9it98AmPYtG4lu-Pw5k"/>
+</div>
+<div class="aspect-[3/4] bg-surface-container-low cursor-pointer border border-transparent hover:border-primary-container transition-all">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" data-alt="Back view of a sleek techwear jacket featuring modular pockets and reflective geometric patterns on dark fabric" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC9cGWWbBkbsQrO6nawdjL_jnoAEtoL1-g-fkUx0fNVVAzNJ6NH7tt9w1ymJ3ghKfEyHLcEf6oN7ZfbmRqcWfsfj3fkt742y_UvCFXewMhlvHWp0ltxEmWOI_7d8mnGfy9qNssTlOCZ6zFVpERKk7q-3oLo1ZBpSt6UK0-BekLONZ7Lfxj2SNniYpZFjvMcm3gWlkPEglqRavTqdOxOxT4pI8j8E6N87ZHDoAN4rjhirIDbzwUaS6pQ7cabDdiZIRdIdBt8Jm4ZLGE"/>
+</div>
+</div>
+<!-- Main Image -->
+<div class="md:col-span-10 aspect-[3/4] bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Hero shot of a cyberpunk inspired techwear jacket with integrated led lighting and sharp geometric silhouettes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB3pwTkDrmutubrzQRx2nJcItXs35GSfHTKDQ5KxNAnaDO1DAT7hm92Vqt_VQtiKc25aDzvFz9gcH9sM7KQ1ynAA3bLWWC1JPeDvQTCkXWGtkdnajt5UPWjiEkeiUHo0HGnCvXmEygMBLod2P2weBw2TFy5jM_EipB-ZcRnBFw5K63PudE6lc6WSqgnDBzGhmPXCWzoqs1LKb65GUUTrkvoNiwHfK4YtKjmJk68FDy7Nno_dsArQFe_iQ3FyBufhivmu-FogTXuabk"/>
+</div>
+</div>
+<!-- Product Info -->
+<div class="lg:col-span-5 flex flex-col space-y-8">
+<div class="space-y-2">
+<div class="flex items-center space-x-2 text-primary-container text-xs font-bold tracking-[0.2em] uppercase">
+<span>New Arrival</span>
+<span class="w-8 h-[1px] bg-primary-container"></span>
+</div>
+<h1 class="text-5xl font-black font-headline tracking-tighter uppercase leading-none text-white">
+                        VIBE-01 <br/>TECH JACKET
+                    </h1>
+<div class="flex items-center space-x-4 pt-2">
+<span class="text-3xl font-headline font-bold text-white">$449.00</span>
+<div class="flex items-center text-primary-container">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star_half</span>
+<span class="text-xs text-neutral-500 ml-2 uppercase tracking-widest">(48 Reviews)</span>
+</div>
+</div>
+</div>
+<p class="text-neutral-400 text-sm leading-relaxed max-w-md">
+                    Engineered for the urban vanguard. Featuring 3L waterproof membrane, modular attachment points, and signature neon fiber-optic integration. This is not apparel; it is hardware for the streets.
+                </p>
+<!-- Selections -->
+<div class="space-y-6">
+<!-- Color -->
+<div class="space-y-3">
+<label class="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">Select Core Tone</label>
+<div class="flex space-x-3">
+<button class="w-8 h-8 rounded-full bg-black ring-2 ring-primary-container ring-offset-4 ring-offset-surface"></button>
+<button class="w-8 h-8 rounded-full bg-neutral-700 hover:ring-2 hover:ring-white/20 transition-all"></button>
+<button class="w-8 h-8 rounded-full bg-[#1e1a2d] hover:ring-2 hover:ring-white/20 transition-all"></button>
+</div>
+</div>
+<!-- Size -->
+<div class="space-y-3">
+<div class="flex justify-between items-center max-w-sm">
+<label class="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">Chassis Size</label>
+<button class="text-[10px] uppercase underline text-neutral-400">Size Matrix</button>
+</div>
+<div class="grid grid-cols-4 gap-2 max-w-sm">
+<button class="py-3 border border-outline-variant hover:border-primary-container transition-colors uppercase text-xs font-bold text-white">S</button>
+<button class="py-3 border border-primary-container bg-primary-container/10 uppercase text-xs font-bold text-white">M</button>
+<button class="py-3 border border-outline-variant hover:border-primary-container transition-colors uppercase text-xs font-bold text-white">L</button>
+<button class="py-3 border border-outline-variant hover:border-primary-container transition-colors uppercase text-xs font-bold text-white">XL</button>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col space-y-4 max-w-md pt-4">
+<button class="group relative bg-primary-container text-white py-5 font-black uppercase tracking-widest text-sm neon-glow transition-all flex items-center justify-center space-x-3">
+<span>Initiate Purchase</span>
+<span class="material-symbols-outlined text-lg">bolt</span>
+</button>
+<button class="border border-outline-variant hover:border-white/40 py-5 text-white font-black uppercase tracking-widest text-sm transition-all flex items-center justify-center space-x-3">
+<span>Add to Registry</span>
+<span class="material-symbols-outlined text-lg">add_shopping_cart</span>
+</button>
+</div>
+<!-- Additional Info -->
+<div class="grid grid-cols-2 gap-4 pt-8 border-t border-white/5">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-neutral-500">local_shipping</span>
+<span class="text-[10px] uppercase font-bold text-neutral-400">Global Priority Shipping</span>
+</div>
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-neutral-500">verified</span>
+<span class="text-[10px] uppercase font-bold text-neutral-400">Lifetime Directive Warranty</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Social Proof / Reviews -->
+<section class="mt-32 space-y-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-6">
+<div>
+<h2 class="text-4xl font-black font-headline uppercase tracking-tighter">User Intel</h2>
+<p class="text-neutral-500 text-xs uppercase tracking-widest mt-2">Field reports from the collective</p>
+</div>
+<div class="mt-4 md:mt-0 flex items-center space-x-8">
+<div class="text-center">
+<div class="text-3xl font-black text-white">4.8</div>
+<div class="text-[10px] uppercase text-neutral-500">Average Grade</div>
+</div>
+<button class="bg-surface-container-high px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors">Write Report</button>
+</div>
+</div>
+<!-- Review Photo Gallery -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+<div class="aspect-square bg-surface-container overflow-hidden grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="User photo of a woman in Tokyo wearing the tech jacket at night under neon signs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLLtevx7-B-9mlFtPbQf075sSi-iBtli-Eptf11jGVV42WyS9qj4q9qLoeFsX9maO_z1AxeLPZYEXRLTo3NV-bcYkIxHzval2X8XWx9mjEONKv1MZHJsd81fIIseN8IOgyOw3K1Wivc-YqGlA-AlSUqbrK5_cKm50rpsEUwTwLfNItuh8JKYVUI6pK0vfuSTTjHJVwWcSS4UKwvFkh1JZzDm8GajakqQi6uECV2THP7i95ifb60qt4YHwdp0zfOsyh_IGYEW4-rGSc"/>
+</div>
+<div class="aspect-square bg-surface-container overflow-hidden grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Mirror selfie of a user showing off the reflective details of the jacket sleeves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX7qRGSoJZ3eH41cxes_hCk3vCeljHIVRPCOmUK3cnkPje1T2bl1nIj4g8Q282yImArmAZQpGMT3Kk_JO1MK3E6qEQwjKey6vhE_A4X_6wGd0sRl4m8H0ABkTsw5poOlN3UxlGsBTmugcJqZfARKi9WMd3y5dXsOmRPZN2hNkKGZ26FhMw0IhMCaIMGeUC4z-E0s6jsZ12UEcKg4XzjEemFraldbETA01w9fXILev-8Qit0qZTf079HOED1cpvFv24wnx7KIkS13Cu"/>
+</div>
+<div class="aspect-square bg-surface-container overflow-hidden grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="High angle shot of the jacket worn in a minimalist concrete architectural setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsOUtk37elLIaiF3QmtELaL5I85i6wG1J0EqWvtCJY1K_Fd-rBvwYN-f0iHc16Th3lRCZfO5ZCQjghC_m7aol_URmm-1IBsz12bmBJT9eU19zDBiWXfk1BFpL74XZeO1kclmt2-CdAi0f0AX0JFjebimR0rnWz3mPTPohd5X7wxNglShl_s08MseGK-CoO9hXL5nlDdV751F09Y-tRqMeP57uk15FK1vlPgnqHpFnNEbjSEx-2DQR4F_OUfb4lmmsEXugA15zLTAKU"/>
+</div>
+<div class="aspect-square bg-surface-container overflow-hidden grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Close up of the fiber optic neon glow integrated into the jacket seams in low light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYVvQ16vViwVYRbajQsE2PyZ9ZfmbGH4w00W9qaDJ630AkGXAk-cGEX4dPP1PNbG9HxOk6Y9CrUZymoGhv6l58SB_387cjS9eVRmHYhRIhBWmXobZMO-JmlnQfhWCWzmJ7lwpxXFNL8keh25hN_xzmDDNjXaMeEGXgGrIP0xuR479w3ASOOZBYcy_Wth_qSY7AY2Vn_-GqQJpNkkHBO2P9YpH3dSFwOJfOzrdD2k5IRP5n58uzDcfOnRc1sTnNuc-RRIQ_3B-4pU3k"/>
+</div>
+<div class="hidden lg:block aspect-square bg-surface-container overflow-hidden grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="User shot of the jacket in a raining urban environment demonstrating waterproof capability" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg9Vehw4EFc9xXTLliOrsc9A0MltQYnkuUgL0Ohr_A2zRDhKey8enYJ8Vt3a7L1yfQSF08-zk5bRoniWHTcg2ClRwAD55BBUmDia0Rs80HgKMh9hkxFm9s6KTa-vnfF8geADTYwiBv6YLFx18idxbhTjxWq-Rfu5kqW8NI_P7GNJHWhzeVZNkhovgDQ1xsecakSIO3EvKRL_Fv6sOReBMYTP_xehnkSZwQRJNoHFsdCddv4rrKrThou9dV6gQ32sMh4ZBvcU1_OQkb"/>
+</div>
+<div class="hidden lg:flex aspect-square bg-surface-container-high items-center justify-center cursor-pointer">
+<span class="text-xs font-bold uppercase text-primary-container">+124 PHOTOS</span>
+</div>
+</div>
+<!-- Single Review Bento Card -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-8 border-l-4 border-primary-container">
+<div class="flex items-center space-x-2 mb-4">
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<h4 class="font-headline font-bold text-xl uppercase tracking-tight mb-2">Absolute Unit of a Jacket</h4>
+<p class="text-neutral-400 text-sm mb-6 leading-relaxed">
+                        The material feels like it's from 2050. I wore this through a heavy storm in London and stayed completely dry. The fiber optics are a massive flex at night. Worth every cent.
+                    </p>
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 bg-surface-bright"></div>
+<div>
+<div class="text-[10px] font-bold text-white uppercase">Kaelen_V</div>
+<div class="text-[10px] text-neutral-600 uppercase">Verified Operative</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-8 border-l-4 border-neutral-700">
+<div class="flex items-center space-x-2 mb-4">
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-neutral-600 text-sm">star</span>
+</div>
+<h4 class="font-headline font-bold text-xl uppercase tracking-tight mb-2">Futuristic Silhouette</h4>
+<p class="text-neutral-400 text-sm mb-6 leading-relaxed">
+                        Sizing runs a bit small, definitely size up if you want that oversized street look. The internal pockets are well thought out for tech storage.
+                    </p>
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 bg-surface-bright"></div>
+<div>
+<div class="text-[10px] font-bold text-white uppercase">S_Nakano</div>
+<div class="text-[10px] text-neutral-600 uppercase">Verified Operative</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommendations -->
+<section class="mt-32 space-y-8">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-black font-headline uppercase tracking-tighter">Synchronized Gear</h2>
+<a class="text-[10px] uppercase font-bold tracking-widest text-primary-container hover:underline underline-offset-4" href="#">Browse Collection</a>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Product Card -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] bg-surface-container-lowest relative overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" data-alt="High top futuristic sneakers with thick translucent soles and purple mesh details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhINTeqR9IRB4gwxmGP1ebGrLLSpiHCd7eIGHSfUU9R2hkj8cIM9m5FbBoUl-ScjxyOhP6hgrFRnm3thzQsjV6kwm3_xwkQ3aY9J5w_jYYxErnkXLrhdjmFWYrRaEbREFJBFk10035nNeDhmzEh17bxNhU2pf32mPR3AjD_d3Ki7PEREurfIT5DtyoMYdegdAy_zahhM7qYTPaB-VMyk-FdxMeoYtySzNQhgK00NWHTPP9cT6HaOsY_yiZ1Ub332hSCleuwrRkXkU5"/>
+<div class="absolute bottom-4 left-4">
+<span class="bg-black text-[10px] font-bold px-2 py-1 text-white uppercase">Restocked</span>
+</div>
+</div>
+<h3 class="text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-primary-container transition-colors">Nova-X Footwear</h3>
+<p class="text-sm font-headline font-bold">$280</p>
+</div>
+<!-- Product Card -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] bg-surface-container-lowest relative overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" data-alt="Sleek black utility vest with multiple tactical pockets and industrial webbing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoEWgerBdvRbjCxvC8rzSqAcSUdmqotN38Ygoo9dN7Kgd9UqP7BuoG0VlNJzUwmRFjSB23_9as5xzwOp8-weYazzFlRwDukB1PKFTn2C3zjcxUcZmYGaCRqlic6IUSng1kjKpVkHUz9561KFhWEZC3vGOH6U4br9QiNp4VbEQRQApr2ac13DxpupG13xePSdo1KOMAAF9MhwJegv1DjdSzhZR84YV5HWQ_fKgCfmPLz9T7knxeWWwmFAzAuxZALdDWn0rEHB3bqVvn"/>
+</div>
+<h3 class="text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-primary-container transition-colors">Alpha Utility Vest</h3>
+<p class="text-sm font-headline font-bold">$195</p>
+</div>
+<!-- Product Card -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] bg-surface-container-lowest relative overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" data-alt="Black cargo joggers with tapered ankles and oversized side pockets in high-tech fabric" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi0FL11VjSikqpOFy5v8iipA86cxL6olvAVMTedUXEGwSaMl8_jKI8SJx9VvQz8xs0qNOT5_Z2ucLnk84JWq8nppnW0YWrws0Uf7qhgEyGghvRY9vgb_vZZ2BUdKCp0EyGzwmCqAov62Apko-9OTLSTPwGl_dMULzFdHMKwlv9D3TcbOQB1KAzTadrvbPeHEKpnx6whv3gO_j82XPk-7RSFGIdy6CgLzKe4gXs7hWw0O1aiwTLVv9IpRGS09qZiBcwDSyYkoZu9Mmb"/>
+</div>
+<h3 class="text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-primary-container transition-colors">Drift Cargo V2</h3>
+<p class="text-sm font-headline font-bold">$160</p>
+</div>
+<!-- Product Card -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] bg-surface-container-lowest relative overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" data-alt="Wraparound futuristic sunglasses with iridescent purple lenses and sharp black frame" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf7gsWfkB0mNmEa75vgXzSeLh5LP1HwewnZVXib_uFw23m3ftso8x_FX-FkEEAck2lpLRVyHyUfcN2GOIjS2DntyZoevtWjQdl4RxrApZLGn5rlBI2voyUPFqUjC7X8FKIfWEJmNvv9ra0lWKXoG5ViW8eNlSo-x2B2JLLIblD6Q26JRV_xYmAEMzophOy-VgwuEBvdTOC2oxvKXbJyMNvBhe5e-X_5adqeqmTHrCN4r2W7FPeZdImw3Zf8ZiDwO6GOz0gLK3my8mC"/>
+</div>
+<h3 class="text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-primary-container transition-colors">Ocular-S Frame</h3>
+<p class="text-sm font-headline font-bold">$120</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-950 w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-2 space-y-6">
+<div class="text-xl font-bold text-white font-headline tracking-tighter uppercase">URBANVIBE</div>
+<p class="text-neutral-500 text-xs tracking-widest max-w-sm leading-loose">
+                    THE KINETIC NOIR DIRECTIVE. WE ARE THE ARCHITECTS OF THE NEW STREET PARADIGM. ESTABLISHED 2024.
+                </p>
+</div>
+<div class="space-y-4">
+<h4 class="text-white text-[10px] font-bold uppercase tracking-[0.3em]">Protocol</h4>
+<ul class="space-y-2 font-['Inter'] text-sm uppercase tracking-widest text-neutral-500">
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">About</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">FAQ</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Shipping</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="text-white text-[10px] font-bold uppercase tracking-[0.3em]">Directives</h4>
+<ul class="space-y-2 font-['Inter'] text-sm uppercase tracking-widest text-neutral-500">
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Newsletter</a></li>
+<li><a class="hover:text-[#bc13fe] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Terms</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-white/5 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-neutral-600 uppercase tracking-[0.3em]">
+<span>© 2024 URBANVIBE. KINETIC NOIR DIRECTIVE.</span>
+<div class="mt-4 md:mt-0 flex space-x-6">
+<a class="hover:text-white" href="#">Instagram</a>
+<a class="hover:text-white" href="#">Discord</a>
+<a class="hover:text-white" href="#">X.com</a>
+</div>
+</div>
+</footer>
+</body></html>
