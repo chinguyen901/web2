@@ -321,6 +321,7 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const CART_KEY = "uv_cart_count";
 
     function go(path) {
       window.location.href = path;
@@ -335,13 +336,37 @@
       return;
     }
 
+    function getCartCount() {
+      return Number(localStorage.getItem(CART_KEY) || "0");
+    }
+
+    function setCartCount(next) {
+      localStorage.setItem(CART_KEY, String(Math.max(0, next)));
+      updateCartBadges();
+    }
+
+    function getCartIconButtons() {
+      return Array.from(document.querySelectorAll("button")).filter((btn) => {
+        const icon = btn.querySelector(".material-symbols-outlined");
+        return icon && icon.textContent.includes("shopping_bag");
+      });
+    }
+
+    function updateCartBadges() {
+      const count = getCartCount();
+      getCartIconButtons().forEach((btn) => {
+        const badge = btn.querySelector("span.absolute");
+        if (badge) badge.textContent = String(count);
+      });
+    }
+
     function routeFromLabel(label) {
       const t = (label || "").toLowerCase().trim();
       if (!t) return null;
       if (t.includes("urbanvibe") || t.includes("home")) return ROUTES.home;
       if (t.includes("new drops") || t.includes("men") || t.includes("women") || t.includes("accessories")) return ROUTES.products;
       if (t.includes("shop the drop") || t.includes("lookbook") || t.includes("view all") || t.includes("browse collection")) return ROUTES.products;
-      if (t.includes("add to bag") || t.includes("quick add")) return ROUTES.cart;
+      if (t.includes("add to bag") || t.includes("quick add")) return null;
       if (t.includes("proceed to checkout")) return ROUTES.checkout;
       if (t.includes("complete order")) return ROUTES.profile;
       if (t.includes("login") || t.includes("register")) return ROUTES.login;
@@ -374,6 +399,8 @@
         go(ROUTES.home);
       });
     });
+
+    updateCartBadges();
   })();
 </script>
 </body></html>

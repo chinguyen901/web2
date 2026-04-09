@@ -16,3 +16,4 @@ async function handler(req, res) {
 }
 
 module.exports = catchAsync(handler);
+module.exports.default = module.exports;

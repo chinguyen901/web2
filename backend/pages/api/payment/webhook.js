@@ -88,3 +88,4 @@ const config = {
 
 module.exports = handler;
 module.exports.config = config;
+module.exports.default = module.exports;

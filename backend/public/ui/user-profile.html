@@ -328,6 +328,7 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const CART_KEY = "uv_cart_count";
 
     function go(path) {
       window.location.href = path;
@@ -340,6 +341,20 @@
     if (PAGE_TYPE !== "login" && !isLoggedIn()) {
       go(ROUTES.login);
       return;
+    }
+
+    function getCartCount() {
+      return Number(localStorage.getItem(CART_KEY) || "0");
+    }
+
+    function updateCartBadges() {
+      const count = getCartCount();
+      Array.from(document.querySelectorAll("button")).forEach((btn) => {
+        const icon = btn.querySelector(".material-symbols-outlined");
+        if (!icon || !icon.textContent.includes("shopping_bag")) return;
+        const badge = btn.querySelector("span.absolute");
+        if (badge) badge.textContent = String(count);
+      });
     }
 
     function routeFromLabel(label) {
@@ -381,6 +396,8 @@
         go(ROUTES.home);
       });
     });
+
+    updateCartBadges();
   })();
 </script>
 </body></html>
