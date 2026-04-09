@@ -138,13 +138,18 @@
 </div>
 <div class="flex-1 space-y-2">
 <div class="flex items-center gap-4">
-<h1 class="font-headline text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Marcus Thorne</h1>
+<h1 id="profile-username" class="font-headline text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">Urban User</h1>
 <span class="bg-surface-container-highest text-[10px] tracking-[0.2em] px-2 py-1 uppercase font-bold text-primary-container">PRO MEMBER</span>
 </div>
 <div class="flex flex-col md:flex-row md:items-center gap-4 text-neutral-500 font-label uppercase text-xs tracking-widest">
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span> Joined November 2023</span>
 <span class="hidden md:block">|</span>
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span> Tokyo, Japan</span>
+</div>
+<div class="pt-2">
+<button id="profile-logout-btn" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors">
+                        Logout
+                    </button>
 </div>
 </div>
 </header>
@@ -328,6 +333,7 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
     const CART_KEY = "uv_cart_count";
 
     function go(path) {
@@ -341,6 +347,24 @@
     if (PAGE_TYPE !== "login" && !isLoggedIn()) {
       go(ROUTES.login);
       return;
+    }
+
+    function logout() {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      go(ROUTES.login);
+    }
+
+    function mountProfileIdentity() {
+      const auth = JSON.parse(localStorage.getItem(AUTH_KEY) || "{}");
+      const session = JSON.parse(localStorage.getItem(SESSION_KEY) || "{}");
+      const email = auth?.user?.email || session?.email || "";
+      const username = email ? email.split("@")[0] : "Urban User";
+      const title = document.getElementById("profile-username");
+      if (title) title.textContent = username;
+
+      const logoutBtn = document.getElementById("profile-logout-btn");
+      if (logoutBtn) logoutBtn.addEventListener("click", logout);
     }
 
     function getCartCount() {
@@ -398,6 +422,7 @@
     });
 
     updateCartBadges();
+    mountProfileIdentity();
   })();
 </script>
 </body></html>

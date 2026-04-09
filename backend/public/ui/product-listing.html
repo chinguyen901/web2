@@ -428,7 +428,9 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
     const CART_KEY = "uv_cart_count";
+    const CART_ITEMS_KEY = "uv_cart_items";
 
     function go(path) {
       window.location.href = path;
@@ -443,8 +445,29 @@
       return;
     }
 
+    function logout() {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      go(ROUTES.login);
+    }
+
+
     function getCartCount() {
       return Number(localStorage.getItem(CART_KEY) || "0");
+    }
+
+    function getCartItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CART_ITEMS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_e) {
+        return [];
+      }
+    }
+
+    function setCartItems(items) {
+      localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(items));
+      setCartCount(items.reduce((sum, item) => sum + Number(item.quantity || 0), 0));
     }
 
     function setCartCount(next) {
@@ -480,6 +503,115 @@
       });
     }
 
+    function parsePriceFromText(text) {
+      const num = String(text || "").replace(/[^0-9.]/g, "");
+      return Number(num || 0);
+    }
+
+    function addItemFromButton(btn) {
+      const card = btn.closest(".group") || btn.closest("section") || document.body;
+      const nameEl = card.querySelector("h3, h4");
+      const priceEl = card.querySelector("span.font-headline, p.text-primary-container");
+      const quickMatch = (btn.textContent || "").match(/\$\s*([0-9]+(?:\.[0-9]+)?)/);
+      const imgEl = card.querySelector("img");
+      const name = (nameEl?.textContent || "UrbanVibe Item").trim();
+      const price =
+        quickMatch && quickMatch[1]
+          ? Number(quickMatch[1])
+          : parsePriceFromText(priceEl?.textContent);
+      const image = imgEl?.getAttribute("src") || "";
+      const id = "item-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+      const items = getCartItems();
+      const idx = items.findIndex((i) => i.id === id);
+      if (idx >= 0) {
+        items[idx].quantity += 1;
+      } else {
+        items.push({ id, name, price, image, meta: "Default", quantity: 1 });
+      }
+      setCartItems(items);
+      animateCartIcon();
+    }
+
+    // ---------- Product filters & sorting ----------
+    const grid = document.querySelector("main .flex-1.grid");
+    const productCards = grid
+      ? Array.from(grid.children).filter((el) => el.classList.contains("group"))
+      : [];
+
+    function inferCategory(text) {
+      const t = (text || "").toLowerCase();
+      if (t.includes("footwear") || t.includes("sneaker") || t.includes("runner")) return "sneakers";
+      if (t.includes("accessory") || t.includes("bag") || t.includes("hat")) return "accessories";
+      if (t.includes("outerwear") || t.includes("puffer")) return "jackets";
+      if (t.includes("tee")) return "tees";
+      return "hoodies";
+    }
+
+    function setupCardMetadata() {
+      const sizePool = ["xs,s", "s,m", "m,l", "l,xl", "xl,xxl", "m,l,xl"];
+      productCards.forEach((card, idx) => {
+        const name = card.querySelector("h3")?.textContent || "";
+        const priceText = card.querySelector("span.font-headline")?.textContent || "";
+        const typeText = card.querySelector("p.text-primary-container, p.text-neutral-500")?.textContent || "";
+        const category = inferCategory(typeText + " " + name);
+        card.dataset.category = category;
+        card.dataset.price = String(parsePriceFromText(priceText));
+        card.dataset.sizes = sizePool[idx % sizePool.length];
+      });
+    }
+
+    let currentSort = "newest";
+    let selectedSize = "s";
+    const sidebar = document.querySelector("aside");
+    const categoryChecks = sidebar
+      ? Array.from(sidebar.querySelectorAll("section:first-of-type input[type='checkbox']"))
+      : [];
+    const sizeButtons = sidebar
+      ? Array.from(sidebar.querySelectorAll("section:nth-of-type(2) button"))
+      : [];
+    const priceRange = sidebar
+      ? sidebar.querySelector("section:nth-of-type(3) input[type='range']")
+      : null;
+
+    if (priceRange) {
+      priceRange.min = "50";
+      priceRange.max = "1200";
+      priceRange.value = "1200";
+    }
+
+    function applyFilters() {
+      const selectedCategories = categoryChecks
+        .filter((c) => c.checked)
+        .map((c) => c.parentElement?.textContent?.trim().toLowerCase() || "");
+      const maxPrice = priceRange ? Number(priceRange.value) : 999999;
+
+      let list = productCards.filter((card) => {
+        const cat = card.dataset.category || "";
+        const price = Number(card.dataset.price || "0");
+        const sizes = (card.dataset.sizes || "").split(",");
+        const passCat =
+          selectedCategories.length === 0 ||
+          selectedCategories.some((s) => cat.includes(s.replace("t-shirts", "tees")));
+        const passSize = !selectedSize || sizes.includes(selectedSize);
+        const passPrice = price <= maxPrice;
+        const soldOut = (card.textContent || "").toLowerCase().includes("sold out");
+        return passCat && passSize && passPrice && !soldOut;
+      });
+
+      if (currentSort === "price-asc") {
+        list.sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price));
+      } else if (currentSort === "price-desc") {
+        list.sort((a, b) => Number(b.dataset.price) - Number(a.dataset.price));
+      }
+
+      productCards.forEach((c) => (c.style.display = "none"));
+      list.forEach((c) => {
+        c.style.display = "";
+        grid.appendChild(c);
+      });
+    }
+
     function routeFromLabel(label) {
       const t = (label || "").toLowerCase().trim();
       if (!t) return null;
@@ -500,6 +632,27 @@
       if (href === "#" && target) {
         a.setAttribute("href", target);
       }
+
+      const text = (a.textContent || "").toLowerCase();
+      if (text.includes("price: low-high")) {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentSort = "price-asc";
+          applyFilters();
+        });
+      } else if (text.includes("price: high-low")) {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentSort = "price-desc";
+          applyFilters();
+        });
+      } else if (text.includes("popularity")) {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentSort = "newest";
+          applyFilters();
+        });
+      }
     });
 
     document.querySelectorAll("button").forEach((btn) => {
@@ -512,8 +665,7 @@
       if (text.includes("add to bag") || text.includes("quick add")) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          setCartCount(getCartCount() + 1);
-          animateCartIcon();
+          addItemFromButton(btn);
         });
       } else if (target) {
         btn.addEventListener("click", () => go(target));
@@ -527,6 +679,25 @@
       });
     });
 
+    categoryChecks.forEach((cb) => cb.addEventListener("change", applyFilters));
+    sizeButtons.forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        sizeButtons.forEach((b) => {
+          b.classList.remove("border-primary-container", "bg-primary-container/10");
+          b.classList.add("border-outline-variant/30");
+        });
+        btn.classList.add("border-primary-container", "bg-primary-container/10");
+        selectedSize = (btn.textContent || "").trim().toLowerCase();
+        applyFilters();
+      });
+    });
+    if (priceRange) {
+      priceRange.addEventListener("input", applyFilters);
+    }
+
+    setupCardMetadata();
+    applyFilters();
     updateCartBadges();
   })();
 </script>

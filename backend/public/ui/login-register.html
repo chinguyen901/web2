@@ -250,6 +250,24 @@
       window.location.href = path;
     }
 
+    function showLoadingAndGo(path) {
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.inset = "0";
+      overlay.style.background = "rgba(0,0,0,0.75)";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.flexDirection = "column";
+      overlay.style.zIndex = "99999";
+      overlay.innerHTML =
+        '<div style="width:42px;height:42px;border:3px solid #555;border-top-color:#bc13fe;border-radius:9999px;animation:uvspin 0.8s linear infinite"></div><p style="color:#fff;margin-top:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Loading Homepage...</p><style>@keyframes uvspin{to{transform:rotate(360deg)}}</style>';
+      document.body.appendChild(overlay);
+      setTimeout(function () {
+        go(path);
+      }, 900);
+    }
+
     function isLoggedIn() {
       return Boolean(localStorage.getItem(SESSION_KEY));
     }
@@ -402,7 +420,7 @@
           AUTH_KEY,
           JSON.stringify({ token: data.token, user: data.user })
         );
-        go(ROUTES.home);
+        showLoadingAndGo(ROUTES.home);
       });
     }
   })();

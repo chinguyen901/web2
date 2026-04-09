@@ -131,7 +131,7 @@
 </header>
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 <!-- Item List -->
-<div class="lg:col-span-8 space-y-px">
+<div id="cart-item-list" class="lg:col-span-8 space-y-px">
 <!-- Cart Item 1 -->
 <div class="bg-surface-container-low p-6 flex flex-col md:flex-row gap-8 items-start md:items-center group hover:bg-surface-container transition-colors duration-300">
 <div class="w-32 h-40 bg-surface-container-lowest flex-shrink-0 overflow-hidden">
@@ -196,7 +196,7 @@
 <div class="space-y-4 font-label text-sm uppercase tracking-widest">
 <div class="flex justify-between">
 <span class="text-neutral-400">Subtotal</span>
-<span class="text-white font-bold">$425.00</span>
+<span id="summary-subtotal" class="text-white font-bold">$425.00</span>
 </div>
 <div class="flex justify-between">
 <span class="text-neutral-400">Shipping</span>
@@ -204,7 +204,7 @@
 </div>
 <div class="flex justify-between">
 <span class="text-neutral-400">Estimated Tax</span>
-<span class="text-white font-bold">$34.00</span>
+<span id="summary-tax" class="text-white font-bold">$34.00</span>
 </div>
 </div>
 <div class="pt-6 border-t border-white/5 space-y-4">
@@ -217,11 +217,11 @@
 <div class="pt-8 border-t border-white/10 flex justify-between items-end">
 <span class="font-headline font-bold text-xl uppercase text-white">Total</span>
 <div class="text-right">
-<span class="block text-4xl font-black font-headline tracking-tighter text-primary-container">$459.00</span>
+<span id="summary-total" class="block text-4xl font-black font-headline tracking-tighter text-primary-container">$459.00</span>
 <span class="text-[10px] text-neutral-500 uppercase tracking-widest">Installments available</span>
 </div>
 </div>
-<button class="w-full bg-primary-container text-white py-6 font-black font-headline text-xl uppercase tracking-tighter neon-glow transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+<button id="cart-checkout-btn" class="w-full bg-primary-container text-white py-6 font-black font-headline text-xl uppercase tracking-tighter neon-glow transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
                         Proceed to Checkout
                     </button>
 <div class="flex items-center justify-center gap-4 text-neutral-500">
@@ -321,7 +321,9 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
     const CART_KEY = "uv_cart_count";
+    const CART_ITEMS_KEY = "uv_cart_items";
 
     function go(path) {
       window.location.href = path;
@@ -336,12 +338,28 @@
       return;
     }
 
-    function getCartCount() {
-      return Number(localStorage.getItem(CART_KEY) || "0");
+    function logout() {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      go(ROUTES.login);
     }
 
-    function setCartCount(next) {
-      localStorage.setItem(CART_KEY, String(Math.max(0, next)));
+
+    function getCartItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CART_ITEMS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_e) {
+        return [];
+      }
+    }
+
+    function setCartItems(items) {
+      localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(items));
+      localStorage.setItem(
+        CART_KEY,
+        String(items.reduce((sum, item) => sum + Number(item.quantity || 0), 0))
+      );
       updateCartBadges();
     }
 
@@ -353,7 +371,7 @@
     }
 
     function updateCartBadges() {
-      const count = getCartCount();
+      const count = Number(localStorage.getItem(CART_KEY) || "0");
       getCartIconButtons().forEach((btn) => {
         const badge = btn.querySelector("span.absolute");
         if (badge) badge.textContent = String(count);
@@ -400,7 +418,108 @@
       });
     });
 
+    function formatPrice(value) {
+      return "$" + Number(value).toFixed(2);
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cart-item-list");
+      const subtotalEl = document.getElementById("summary-subtotal");
+      const taxEl = document.getElementById("summary-tax");
+      const totalEl = document.getElementById("summary-total");
+      if (!container || !subtotalEl || !taxEl || !totalEl) return;
+
+      const items = getCartItems();
+
+      if (!items.length) {
+        container.innerHTML =
+          '<div class="bg-surface-container-low p-8 text-center text-neutral-400 uppercase tracking-widest text-sm">Your cart is empty.</div>';
+        subtotalEl.textContent = formatPrice(0);
+        taxEl.textContent = formatPrice(0);
+        totalEl.textContent = formatPrice(0);
+        return;
+      }
+
+      container.innerHTML = items
+        .map((item) => {
+          const lineTotal = Number(item.price) * Number(item.quantity);
+          return (
+            '<div class="bg-surface-container-low p-6 flex flex-col md:flex-row gap-8 items-start md:items-center group hover:bg-surface-container transition-colors duration-300">' +
+            '<div class="w-32 h-40 bg-surface-container-lowest flex-shrink-0 overflow-hidden">' +
+            '<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="' +
+            (item.image || "https://picsum.photos/seed/fallback/800/1000") +
+            '"/>' +
+            "</div>" +
+            '<div class="flex-grow space-y-1">' +
+            '<h3 class="text-xl font-bold font-headline uppercase tracking-tight text-white">' +
+            item.name +
+            "</h3>" +
+            '<p class="text-neutral-500 font-label text-xs uppercase tracking-widest">' +
+            (item.meta || "Default variant") +
+            "</p>" +
+            '<div class="pt-4 flex items-center gap-6">' +
+            '<div class="flex items-center border border-outline-variant/20">' +
+            '<button data-action="decrease" data-id="' +
+            item.id +
+            '" class="px-3 py-1 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>' +
+            '<span class="px-4 font-bold text-sm">' +
+            item.quantity +
+            "</span>" +
+            '<button data-action="increase" data-id="' +
+            item.id +
+            '" class="px-3 py-1 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>' +
+            "</div>" +
+            '<button data-action="remove" data-id="' +
+            item.id +
+            '" class="text-neutral-500 hover:text-error transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-lg">delete</span><span class="text-[10px] uppercase font-bold tracking-widest">Remove</span></button>' +
+            "</div></div>" +
+            '<div class="text-right"><span class="text-2xl font-black font-headline tracking-tighter text-white">' +
+            formatPrice(lineTotal) +
+            "</span></div></div>"
+          );
+        })
+        .join("");
+
+      const subtotal = items.reduce(
+        (sum, item) => sum + Number(item.price) * Number(item.quantity),
+        0
+      );
+      const tax = subtotal * 0.08;
+      const total = subtotal + tax;
+      subtotalEl.textContent = formatPrice(subtotal);
+      taxEl.textContent = formatPrice(tax);
+      totalEl.textContent = formatPrice(total);
+
+      container.querySelectorAll("button[data-action]").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const action = btn.getAttribute("data-action");
+          const id = btn.getAttribute("data-id");
+          const next = getCartItems()
+            .map((i) => ({ ...i }))
+            .filter((i) => i.id);
+          const idx = next.findIndex((i) => i.id === id);
+          if (idx === -1) return;
+
+          if (action === "increase") next[idx].quantity += 1;
+          if (action === "decrease") next[idx].quantity = Math.max(1, next[idx].quantity - 1);
+          if (action === "remove") next.splice(idx, 1);
+
+          setCartItems(next);
+          renderCart();
+        });
+      });
+    }
+
+    const checkoutBtn = document.getElementById("cart-checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        go(ROUTES.checkout);
+      });
+    }
+
     updateCartBadges();
+    renderCart();
   })();
 </script>
 </body></html>

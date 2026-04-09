@@ -230,7 +230,7 @@
 <div class="bg-surface-container-low p-8 border-t-4 border-primary-container">
 <h3 class="text-xl font-headline font-bold uppercase tracking-tight mb-8">Order Summary</h3>
 <!-- Items List -->
-<div class="space-y-6 mb-8">
+<div id="checkout-items" class="space-y-6 mb-8">
 <div class="flex gap-4">
 <div class="w-20 h-24 bg-surface-container-lowest flex-shrink-0">
 <img class="w-full h-full object-cover" data-alt="Modern high-top urban sneaker in monochromatic black with subtle reflective tech-wear details on a clean dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7VAd9wXYsD-DJp53LJmALJprSdUhyc-BU7PjH0C4Ut8nnHHznmviNuQM6jheYWA9RPDMpidWaNkQjaO5Rv1-t33kL0RKz-MsR_Nci0a5y9_xYOw9WOwl1ItRkArhyvL58JezRMqJTIFYKbavI1Cit36ftqhr8HT9QfH9SWEv8mHN4BP04kcjwJGs6pyHPtPy5kCMZP15Qm--F8XBqtRg8hUtAIt0Hj8kC-ZWg_1EQ9MwsdJaKHanU2C9b84KVHwa9pbTwBcsvMUB5"/>
@@ -260,7 +260,7 @@
 <div class="space-y-4 pt-6 border-t border-outline-variant/20 font-body text-sm">
 <div class="flex justify-between uppercase">
 <span class="text-neutral-500">Subtotal</span>
-<span>$325.00</span>
+<span id="checkout-subtotal">$325.00</span>
 </div>
 <div class="flex justify-between uppercase">
 <span class="text-neutral-500">Shipping</span>
@@ -268,11 +268,11 @@
 </div>
 <div class="flex justify-between uppercase">
 <span class="text-neutral-500">Tax</span>
-<span>$26.00</span>
+<span id="checkout-tax">$26.00</span>
 </div>
 <div class="flex justify-between pt-6 border-t border-outline-variant/20">
 <span class="font-headline font-bold text-xl uppercase tracking-tighter">Total</span>
-<span class="font-headline font-bold text-xl text-primary-container">$351.00</span>
+<span id="checkout-total" class="font-headline font-bold text-xl text-primary-container">$351.00</span>
 </div>
 </div>
 <button class="w-full mt-10 bg-primary-container text-on-primary-container py-6 font-headline font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-[0.98] transition-all neon-glow">
@@ -355,7 +355,9 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
     const CART_KEY = "uv_cart_count";
+    const CART_ITEMS_KEY = "uv_cart_items";
 
     function go(path) {
       window.location.href = path;
@@ -370,6 +372,13 @@
       return;
     }
 
+    function logout() {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      go(ROUTES.login);
+    }
+
+
     function getCartCount() {
       return Number(localStorage.getItem(CART_KEY) || "0");
     }
@@ -377,6 +386,20 @@
     function setCartCount(next) {
       localStorage.setItem(CART_KEY, String(Math.max(0, next)));
       updateCartBadges();
+    }
+
+    function getCartItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CART_ITEMS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_e) {
+        return [];
+      }
+    }
+
+    function clearCart() {
+      localStorage.setItem(CART_ITEMS_KEY, JSON.stringify([]));
+      setCartCount(0);
     }
 
     function getCartIconButtons() {
@@ -407,6 +430,60 @@
       toast.style.zIndex = "9999";
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 1800);
+    }
+
+    function formatPrice(value) {
+      return "$" + Number(value).toFixed(2);
+    }
+
+    function renderCheckoutSummary() {
+      const itemsWrap = document.getElementById("checkout-items");
+      const subtotalEl = document.getElementById("checkout-subtotal");
+      const taxEl = document.getElementById("checkout-tax");
+      const totalEl = document.getElementById("checkout-total");
+      if (!itemsWrap || !subtotalEl || !taxEl || !totalEl) return;
+
+      const items = getCartItems();
+      if (!items.length) {
+        itemsWrap.innerHTML =
+          '<p class="text-neutral-500 uppercase tracking-widest text-xs">No items in cart.</p>';
+        subtotalEl.textContent = formatPrice(0);
+        taxEl.textContent = formatPrice(0);
+        totalEl.textContent = formatPrice(0);
+        return;
+      }
+
+      itemsWrap.innerHTML = items
+        .map((item) => {
+          const line = Number(item.price) * Number(item.quantity);
+          return (
+            '<div class="flex gap-4">' +
+            '<div class="w-20 h-24 bg-surface-container-lowest flex-shrink-0">' +
+            '<img class="w-full h-full object-cover" src="' +
+            (item.image || "https://picsum.photos/seed/fallback/800/1000") +
+            '"/>' +
+            "</div>" +
+            '<div class="flex flex-col justify-between py-1">' +
+            '<div><p class="font-headline font-bold text-sm uppercase leading-tight">' +
+            item.name +
+            '</p><p class="text-[10px] text-neutral-500 uppercase tracking-widest">Qty: ' +
+            item.quantity +
+            "</p></div>" +
+            '<p class="text-primary-container font-headline font-bold">' +
+            formatPrice(line) +
+            "</p></div></div>"
+          );
+        })
+        .join("");
+
+      const subtotal = items.reduce(
+        (sum, item) => sum + Number(item.price) * Number(item.quantity),
+        0
+      );
+      const tax = subtotal * 0.08;
+      subtotalEl.textContent = formatPrice(subtotal);
+      taxEl.textContent = formatPrice(tax);
+      totalEl.textContent = formatPrice(subtotal + tax);
     }
 
     function routeFromLabel(label) {
@@ -441,7 +518,7 @@
       if (text.includes("complete order")) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          setCartCount(0);
+          clearCart();
           showPaymentSuccess();
           setTimeout(() => go(ROUTES.profile), 900);
         });
@@ -458,6 +535,7 @@
     });
 
     updateCartBadges();
+    renderCheckoutSummary();
   })();
 </script>
 </body></html>

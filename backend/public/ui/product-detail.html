@@ -385,7 +385,9 @@
       profile: "/profile"
     };
     const SESSION_KEY = "uv_session";
+    const AUTH_KEY = "uv_auth";
     const CART_KEY = "uv_cart_count";
+    const CART_ITEMS_KEY = "uv_cart_items";
 
     function go(path) {
       window.location.href = path;
@@ -400,8 +402,29 @@
       return;
     }
 
+    function logout() {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      go(ROUTES.login);
+    }
+
+
     function getCartCount() {
       return Number(localStorage.getItem(CART_KEY) || "0");
+    }
+
+    function getCartItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CART_ITEMS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_e) {
+        return [];
+      }
+    }
+
+    function setCartItems(items) {
+      localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(items));
+      setCartCount(items.reduce((sum, item) => sum + Number(item.quantity || 0), 0));
     }
 
     function setCartCount(next) {
@@ -437,6 +460,37 @@
       });
     }
 
+    function parsePriceFromText(text) {
+      const num = String(text || "").replace(/[^0-9.]/g, "");
+      return Number(num || 0);
+    }
+
+    function addItemFromButton(btn) {
+      const card = btn.closest("main") || document.body;
+      const nameEl = card.querySelector("h1, h2, h3");
+      const priceEl = card.querySelector("span.font-headline, p.text-primary-container, .text-primary-container");
+      const btnMatch = (btn.textContent || "").match(/\$\s*([0-9]+(?:\.[0-9]+)?)/);
+      const pageMatch = (card.textContent || "").match(/\$\s*([0-9]+(?:\.[0-9]+)?)/);
+      const imgEl = card.querySelector("img");
+      const name = (nameEl?.textContent || "UrbanVibe Item").trim().slice(0, 80);
+      const price =
+        (btnMatch && Number(btnMatch[1])) ||
+        (pageMatch && Number(pageMatch[1])) ||
+        parsePriceFromText(priceEl?.textContent);
+      const image = imgEl?.getAttribute("src") || "";
+      const id = "item-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+      const items = getCartItems();
+      const idx = items.findIndex((i) => i.id === id);
+      if (idx >= 0) {
+        items[idx].quantity += 1;
+      } else {
+        items.push({ id, name, price, image, meta: "Default", quantity: 1 });
+      }
+      setCartItems(items);
+      animateCartIcon();
+    }
+
     function routeFromLabel(label) {
       const t = (label || "").toLowerCase().trim();
       if (!t) return null;
@@ -469,8 +523,7 @@
       if (text.includes("add to bag") || text.includes("quick add")) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          setCartCount(getCartCount() + 1);
-          animateCartIcon();
+          addItemFromButton(btn);
         });
       } else if (target) {
         btn.addEventListener("click", () => go(target));
