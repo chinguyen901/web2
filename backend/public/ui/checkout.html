@@ -343,6 +343,7 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -518,9 +519,16 @@
       if (text.includes("complete order")) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          clearCart();
-          showPaymentSuccess();
-          setTimeout(() => go(ROUTES.profile), 900);
+          const done = function () {
+            clearCart();
+            showPaymentSuccess();
+            setTimeout(() => go(ROUTES.profile), 900);
+          };
+          if (window.UrbanVibeCart && UrbanVibeCart.getToken()) {
+            UrbanVibeCart.clearAll().then(done).catch(done);
+          } else {
+            done();
+          }
         });
       } else if (target) {
         btn.addEventListener("click", () => go(target));
@@ -534,8 +542,19 @@
       });
     });
 
-    updateCartBadges();
-    renderCheckoutSummary();
+    window.addEventListener("uv-cart-updated", function () {
+      renderCheckoutSummary();
+      updateCartBadges();
+    });
+
+    async function bootstrapCheckout() {
+      if (window.UrbanVibeCart && typeof UrbanVibeCart.syncFromServer === "function" && UrbanVibeCart.getToken()) {
+        await UrbanVibeCart.syncFromServer();
+      }
+      renderCheckoutSummary();
+      updateCartBadges();
+    }
+    void bootstrapCheckout();
   })();
 </script>
 </body></html>

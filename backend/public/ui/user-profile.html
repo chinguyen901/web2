@@ -321,6 +321,7 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -421,8 +422,13 @@
       });
     });
 
-    updateCartBadges();
-    mountProfileIdentity();
+    window.addEventListener("uv-cart-updated", updateCartBadges);
+    async function bootstrapProfile() {
+      if (window.UrbanVibeCart) await UrbanVibeCart.syncFromServer();
+      updateCartBadges();
+      mountProfileIdentity();
+    }
+    void bootstrapProfile();
   })();
 </script>
 </body></html>

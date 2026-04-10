@@ -322,6 +322,7 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -416,6 +417,18 @@
 
     function addItemFromNode(node) {
       const card = node.closest(".group") || node.closest("section") || document.body;
+      const pid = card.getAttribute && card.getAttribute("data-product-id");
+      if (pid && window.UrbanVibeCart && UrbanVibeCart.getToken()) {
+        UrbanVibeCart.add(pid, 1)
+          .then(function () {
+            animateCartIcon();
+          })
+          .catch(function (e) {
+            alert((e && e.message) || "Khong them duoc vao gio hang.");
+          });
+        return;
+      }
+
       const nameEl = card.querySelector("h3, h4");
       const priceEl = card.querySelector("p.text-primary-container, span.text-primary-container, span.font-headline, p.font-headline");
       const quickMatch = (card.textContent || "").match(/\$\s*([0-9]+(?:\.[0-9]+)?)/);
@@ -437,6 +450,22 @@
       }
       setCartItems(items);
       animateCartIcon();
+    }
+
+    function attachFeaturedProductIds() {
+      fetch("/api/products?limit=4&page=1&sort=newest")
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (j) {
+          if (!j.success || !j.data) return;
+          const groups = document.querySelectorAll("main .group.cursor-pointer");
+          j.data.forEach(function (p, i) {
+            const g = groups[i];
+            if (g) g.setAttribute("data-product-id", p.id);
+          });
+        })
+        .catch(function () {});
     }
 
     function routeFromLabel(label) {
@@ -496,6 +525,9 @@
       });
     });
 
+    window.addEventListener("uv-cart-updated", updateCartBadges);
+    attachFeaturedProductIds();
+    if (window.UrbanVibeCart) void UrbanVibeCart.syncFromServer();
     updateCartBadges();
   })();
 </script>

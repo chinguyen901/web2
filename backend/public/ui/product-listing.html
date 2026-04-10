@@ -187,7 +187,7 @@
 </label>
 </div>
 </section>
-<section id="uv-size-section">
+<section id="uv-size-section" class="hidden" aria-hidden="true">
 <h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Size</h3>
 <div class="grid grid-cols-3 gap-2" id="uv-size-buttons">
 <button type="button" data-size="" class="uv-size border border-primary-container bg-primary-container/10 py-2 text-[10px]">All</button>
@@ -231,6 +231,9 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12" id="uv-product-grid"></div>
 <div class="py-20 text-center text-neutral-500 text-xs uppercase tracking-widest font-headline" id="uv-products-loading">Loading products from database…</div>
 <p class="hidden py-12 text-center text-sm text-red-400 font-body" id="uv-products-error"></p>
+<button type="button" id="uv-load-more-btn" class="hidden mt-10 mx-auto border border-primary-container text-on-background px-10 py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-primary-container/15 transition-colors">
+  Load more (+10)
+</button>
 </div>
 </div>
 <!-- AI Recommendations Section -->
@@ -330,6 +333,8 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-products-cache.js"></script>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -447,7 +452,16 @@
       animateCartIcon();
     }
 
-    function addProductToCart(p) {
+    async function addProductToCart(p) {
+      if (window.UrbanVibeCart && UrbanVibeCart.getToken()) {
+        try {
+          await UrbanVibeCart.add(String(p.id), 1);
+          animateCartIcon();
+        } catch (e) {
+          alert((e && e.message) || "Khong them duoc vao gio hang.");
+        }
+        return;
+      }
       const id = String(p.id);
       const name = String(p.name || "UrbanVibe Item");
       const price = Number(p.price);
@@ -462,15 +476,6 @@
 
     function formatMoney(n) {
       return "$" + Number(n).toFixed(2);
-    }
-
-    function sizesForProduct(id) {
-      const pool = ["xs", "s", "m", "l", "xl", "xxl"];
-      let h = 0;
-      const s = String(id);
-      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-      const i0 = h % pool.length;
-      return [pool[i0], pool[(i0 + 1) % pool.length], pool[(h >> 4) % pool.length]];
     }
 
     function createProductCardEl(p) {
@@ -514,7 +519,7 @@
         btn.addEventListener("click", function (e) {
           e.preventDefault();
           e.stopPropagation();
-          addProductToCart(p);
+          addProductToCart(p).catch(function () {});
         });
       }
       overlay.appendChild(btn);
@@ -546,12 +551,14 @@
       return wrap;
     }
 
-    // ---------- Load all products from Neon (/api/products), then filter client-side ----------
-    let dbProducts = [];
+    // ---------- Paginated load (10/page) + IndexedDB cache + background catalog snapshot ----------
+    const PAGE_SIZE = 10;
     let currentSort = "newest";
-    let selectedSizeFilter = "";
     let ratingFilterActive = false;
-    let renderGen = 0;
+    let loadSeq = 0;
+    let currentPage = 1;
+    let totalPages = 1;
+    let totalCount = 0;
 
     const priceRange = document.getElementById("uv-price-range");
     const productGridEl = document.getElementById("uv-product-grid");
@@ -559,7 +566,7 @@
     const errorEl = document.getElementById("uv-products-error");
     const statusEl = document.getElementById("uv-products-status");
     const categoryRoot = document.getElementById("uv-category-filters");
-    const sizeButtons = Array.from(document.querySelectorAll("#uv-size-buttons .uv-size"));
+    const loadMoreBtn = document.getElementById("uv-load-more-btn");
     const ratingBtn = document.getElementById("uv-rating-filter-btn");
 
     function getSelectedCategories() {
@@ -586,15 +593,49 @@
         const anySpecific = others.some((o) => o.checked);
         if (!anySpecific && allCb) allCb.checked = true;
       }
-      applyFilters();
+      void applyFilters();
     }
 
-    function configurePriceRangeFromProducts(products) {
-      if (!priceRange) return;
-      let maxP = 400;
-      if (products.length) {
-        maxP = Math.ceil(Math.max(50, ...products.map((x) => Number(x.price))));
+    function mapSortToApi() {
+      if (currentSort === "price-asc") return "price_asc";
+      if (currentSort === "price-desc") return "price_desc";
+      if (currentSort === "popularity") return "popular";
+      return "newest";
+    }
+
+    function buildApiUrl(page) {
+      const params = new URLSearchParams();
+      params.set("page", String(page));
+      params.set("limit", String(PAGE_SIZE));
+      const cats = getSelectedCategories();
+      if (cats.length) params.set("categories", cats.join(","));
+      if (priceRange) {
+        const v = Number(priceRange.value);
+        const mx = Number(priceRange.max);
+        if (!Number.isNaN(v) && !Number.isNaN(mx) && v < mx) {
+          params.set("maxPrice", String(v));
+        }
       }
+      if (ratingFilterActive) params.set("minRating", "4");
+      params.set("sort", mapSortToApi());
+      return "/api/products?" + params.toString();
+    }
+
+    function setDefaultPriceRange() {
+      if (!priceRange) return;
+      priceRange.min = "0";
+      priceRange.max = "2000";
+      priceRange.step = "1";
+      priceRange.value = "2000";
+      const minLab = document.getElementById("uv-price-min-label");
+      const maxLab = document.getElementById("uv-price-max-label");
+      if (minLab) minLab.textContent = "$0";
+      if (maxLab) maxLab.textContent = "$" + priceRange.value;
+    }
+
+    function applyPriceRangeFromSnapshot(snap) {
+      if (!priceRange || !snap || !snap.items || !snap.items.length) return;
+      const maxP = Math.ceil(Math.max(50, ...snap.items.map((x) => Number(x.price))));
       priceRange.min = "0";
       priceRange.max = String(maxP);
       priceRange.step = "1";
@@ -610,37 +651,6 @@
       if (maxLab && priceRange) maxLab.textContent = "$" + priceRange.value;
     }
 
-    function getFilteredProducts() {
-      const cats = getSelectedCategories();
-      const maxPrice = priceRange ? Number(priceRange.value) : 1e9;
-      const minRating = ratingFilterActive ? 4 : 0;
-
-      let list = dbProducts.filter((p) => {
-        const price = Number(p.price);
-        const cat = String(p.category || "").toLowerCase();
-        if (price > maxPrice) return false;
-        if (Number(p.rating) < minRating) return false;
-        if (cats.length && !cats.includes(cat)) return false;
-        if (selectedSizeFilter) {
-          const sz = sizesForProduct(p.id);
-          if (!sz.includes(selectedSizeFilter)) return false;
-        }
-        return true;
-      });
-
-      const t = (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-      if (currentSort === "price-asc") {
-        list.sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (currentSort === "price-desc") {
-        list.sort((a, b) => Number(b.price) - Number(a.price));
-      } else if (currentSort === "popularity") {
-        list.sort((a, b) => Number(b.rating) - Number(a.rating) || t(a, b));
-      } else {
-        list.sort(t);
-      }
-      return list;
-    }
-
     function updateSortLabel() {
       const el = document.getElementById("uv-sort-label");
       if (!el) return;
@@ -653,73 +663,75 @@
       el.textContent = map[currentSort] || map.newest;
     }
 
-    function applyFilters() {
-      if (!productGridEl) return;
-      const gen = ++renderGen;
-      const list = getFilteredProducts();
-      if (statusEl) {
-        statusEl.textContent =
-          dbProducts.length === 0
-            ? ""
-            : "Showing " + list.length + " of " + dbProducts.length + " products (database)";
-      }
-      productGridEl.innerHTML = "";
-      const chunk = 80;
-      let i = 0;
-      function appendChunk() {
-        if (gen !== renderGen) return;
-        const end = Math.min(i + chunk, list.length);
-        const frag = document.createDocumentFragment();
-        for (; i < end; i++) frag.appendChild(createProductCardEl(list[i]));
-        productGridEl.appendChild(frag);
-        if (i < list.length) {
-          requestAnimationFrame(appendChunk);
-        }
-      }
-      appendChunk();
-      syncPriceMaxLabel();
+    function updateLoadMoreVisibility() {
+      if (!loadMoreBtn) return;
+      if (currentPage < totalPages) loadMoreBtn.classList.remove("hidden");
+      else loadMoreBtn.classList.add("hidden");
     }
 
-    async function loadAllProductsFromApi() {
-      const limit = 100;
-      let page = 1;
-      let totalPages = 1;
-      dbProducts = [];
-      if (errorEl) {
-        errorEl.classList.add("hidden");
-        errorEl.textContent = "";
-      }
-      if (loadingEl) loadingEl.classList.remove("hidden");
-      try {
-        for (;;) {
-          if (statusEl) {
-            statusEl.textContent =
-              totalPages > 1 ? "Loading products… page " + page + " / " + totalPages : "Loading products…";
-          }
-          const res = await fetch("/api/products?page=" + page + "&limit=" + limit);
-          const json = await res.json();
-          if (!res.ok || !json.success) {
-            throw new Error(json.message || "Request failed (" + res.status + ")");
-          }
-          totalPages = json.pagination && json.pagination.totalPages ? json.pagination.totalPages : 1;
-          const batch = json.data || [];
-          dbProducts = dbProducts.concat(batch);
-          if (page >= totalPages) break;
-          page += 1;
+    async function loadProductsPage(page, append) {
+      const seq = ++loadSeq;
+      if (!append) {
+        if (loadingEl) loadingEl.classList.remove("hidden");
+        if (errorEl) {
+          errorEl.classList.add("hidden");
+          errorEl.textContent = "";
         }
-        if (loadingEl) loadingEl.classList.add("hidden");
-        configurePriceRangeFromProducts(dbProducts);
-        applyFilters();
-        updateSortLabel();
+      }
+      try {
+        const url = buildApiUrl(page);
+        let json;
+        if (window.UrbanVibeProductCache) {
+          json = await UrbanVibeProductCache.fetchProducts(url);
+        } else {
+          const res = await fetch(url);
+          json = await res.json();
+        }
+        if (seq !== loadSeq) return;
+        if (!json || !json.success) {
+          throw new Error((json && json.message) || "Could not load products");
+        }
+        totalPages = (json.pagination && json.pagination.totalPages) || 1;
+        totalCount = (json.pagination && json.pagination.total) || 0;
+        currentPage = page;
+        const batch = json.data || [];
+        if (!append && productGridEl) productGridEl.innerHTML = "";
+        if (productGridEl) {
+          batch.forEach((row) => productGridEl.appendChild(createProductCardEl(row)));
+        }
+        const shown = productGridEl ? productGridEl.children.length : 0;
+        if (statusEl) {
+          statusEl.textContent =
+            "Showing " +
+            shown +
+            " loaded · " +
+            totalCount +
+            " total match · page " +
+            currentPage +
+            "/" +
+            totalPages +
+            " (IndexedDB cache 24h · dong bo catalog nen)";
+        }
+        updateLoadMoreVisibility();
+        if (window.UrbanVibeProductCache) {
+          UrbanVibeProductCache.schedulePrefetch((p) => buildApiUrl(p), totalPages, page + 1, 5);
+        }
       } catch (err) {
-        if (loadingEl) loadingEl.classList.add("hidden");
+        if (seq !== loadSeq) return;
         if (errorEl) {
           errorEl.classList.remove("hidden");
           errorEl.textContent =
             (err && err.message) || "Could not load products. Check API and DATABASE_URL on the server.";
         }
         if (statusEl) statusEl.textContent = "";
+      } finally {
+        if (loadingEl) loadingEl.classList.add("hidden");
       }
+    }
+
+    async function applyFilters() {
+      currentPage = 1;
+      await loadProductsPage(1, false);
     }
 
     function routeFromLabel(label) {
@@ -749,21 +761,21 @@
           e.preventDefault();
           currentSort = "price-asc";
           updateSortLabel();
-          applyFilters();
+          void applyFilters();
         });
       } else if (text.includes("price: high-low")) {
         a.addEventListener("click", (e) => {
           e.preventDefault();
           currentSort = "price-desc";
           updateSortLabel();
-          applyFilters();
+          void applyFilters();
         });
       } else if (text.includes("popularity")) {
         a.addEventListener("click", (e) => {
           e.preventDefault();
           currentSort = "popularity";
           updateSortLabel();
-          applyFilters();
+          void applyFilters();
         });
       }
     });
@@ -802,22 +814,10 @@
         });
       });
     }
-    sizeButtons.forEach((btn) => {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        sizeButtons.forEach((b) => {
-          b.classList.remove("border-primary-container", "bg-primary-container/10");
-          b.classList.add("border-outline-variant/30");
-        });
-        btn.classList.add("border-primary-container", "bg-primary-container/10");
-        selectedSizeFilter = String(btn.getAttribute("data-size") || "").toLowerCase();
-        applyFilters();
-      });
-    });
     if (priceRange) {
       priceRange.addEventListener("input", function () {
         syncPriceMaxLabel();
-        applyFilters();
+        void applyFilters();
       });
     }
     if (ratingBtn) {
@@ -827,11 +827,30 @@
         ratingBtn.classList.toggle("border", ratingFilterActive);
         ratingBtn.classList.toggle("border-primary-container", ratingFilterActive);
         ratingBtn.classList.toggle("bg-primary-container/10", ratingFilterActive);
-        applyFilters();
+        void applyFilters();
+      });
+    }
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener("click", function () {
+        if (currentPage >= totalPages) return;
+        loadMoreBtn.disabled = true;
+        loadProductsPage(currentPage + 1, true).finally(function () {
+          loadMoreBtn.disabled = false;
+        });
       });
     }
 
-    loadAllProductsFromApi();
+    window.addEventListener("uv-cart-updated", updateCartBadges);
+    setDefaultPriceRange();
+    if (window.UrbanVibeProductCache) {
+      UrbanVibeProductCache.getCatalogSnapshot().then(function (snap) {
+        applyPriceRangeFromSnapshot(snap);
+      });
+      UrbanVibeProductCache.startBackgroundCatalogSync();
+    }
+    updateSortLabel();
+    void applyFilters();
+    if (window.UrbanVibeCart) void UrbanVibeCart.syncFromServer();
     updateCartBadges();
   })();
 </script>

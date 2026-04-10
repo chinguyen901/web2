@@ -12,12 +12,34 @@ const updateQtySchema = z.object({
   quantity: z.coerce.number().int().positive()
 });
 
-async function getCart(req, res) {
-  const cart = await prisma.cartItem.findMany({
-    where: { userId: req.user.id },
-    include: { product: true },
+async function getSafeCart(userId) {
+  const rows = await prisma.cartItem.findMany({
+    where: { userId },
     orderBy: { createdAt: "asc" }
   });
+  if (!rows.length) return [];
+
+  const productIds = [...new Set(rows.map((r) => r.productId).filter(Boolean))];
+  const products = await prisma.product.findMany({
+    where: { id: { in: productIds } }
+  });
+  const productMap = new Map(products.map((p) => [p.id, p]));
+
+  const orphanIds = rows.filter((r) => !productMap.has(r.productId)).map((r) => r.id);
+  if (orphanIds.length) {
+    // Self-heal old/invalid cart rows to avoid 500 on include product.
+    await prisma.cartItem.deleteMany({
+      where: { id: { in: orphanIds } }
+    });
+  }
+
+  return rows
+    .filter((r) => productMap.has(r.productId))
+    .map((r) => ({ ...r, product: productMap.get(r.productId) }));
+}
+
+async function getCart(req, res) {
+  const cart = await getSafeCart(req.user.id);
   return res.status(200).json({ success: true, cart });
 }
 
@@ -52,11 +74,7 @@ async function addToCart(req, res) {
     });
   }
 
-  const cart = await prisma.cartItem.findMany({
-    where: { userId: req.user.id },
-    include: { product: true },
-    orderBy: { createdAt: "asc" }
-  });
+  const cart = await getSafeCart(req.user.id);
   return res.status(200).json({ success: true, cart });
 }
 
@@ -83,11 +101,7 @@ async function updateCartItem(req, res) {
     data: { quantity: body.quantity }
   });
 
-  const cart = await prisma.cartItem.findMany({
-    where: { userId: req.user.id },
-    include: { product: true },
-    orderBy: { createdAt: "asc" }
-  });
+  const cart = await getSafeCart(req.user.id);
   return res.status(200).json({ success: true, cart });
 }
 
@@ -101,11 +115,7 @@ async function removeCartItem(req, res) {
     where: { userId: req.user.id, productId }
   });
 
-  const cart = await prisma.cartItem.findMany({
-    where: { userId: req.user.id },
-    include: { product: true },
-    orderBy: { createdAt: "asc" }
-  });
+  const cart = await getSafeCart(req.user.id);
   return res.status(200).json({ success: true, cart });
 }
 

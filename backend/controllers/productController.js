@@ -35,7 +35,16 @@ async function getProducts(req, res) {
   if (req.query.search) {
     where.name = { contains: String(req.query.search), mode: "insensitive" };
   }
-  if (req.query.category) {
+  const categoriesParam = req.query.categories;
+  if (categoriesParam) {
+    const list = String(categoriesParam)
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+    if (list.length) {
+      where.category = { in: list };
+    }
+  } else if (req.query.category) {
     where.category = String(req.query.category);
   }
   if (req.query.minPrice || req.query.maxPrice) {
@@ -43,11 +52,27 @@ async function getProducts(req, res) {
     if (req.query.minPrice) where.price.gte = Number(req.query.minPrice);
     if (req.query.maxPrice) where.price.lte = Number(req.query.maxPrice);
   }
+  if (req.query.minRating) {
+    const mr = Number(req.query.minRating);
+    if (!Number.isNaN(mr) && mr > 0) {
+      where.rating = { gte: mr };
+    }
+  }
+
+  const sort = String(req.query.sort || "newest").toLowerCase();
+  let orderBy = { createdAt: "desc" };
+  if (sort === "price_asc" || sort === "price-asc") {
+    orderBy = { price: "asc" };
+  } else if (sort === "price_desc" || sort === "price-desc") {
+    orderBy = { price: "desc" };
+  } else if (sort === "popular" || sort === "popularity") {
+    orderBy = [{ rating: "desc" }, { createdAt: "desc" }];
+  }
 
   const [products, total] = await Promise.all([
     prisma.product.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy,
       skip,
       take: limit
     }),

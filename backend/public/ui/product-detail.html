@@ -373,6 +373,7 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -465,7 +466,24 @@
       return Number(num || 0);
     }
 
-    function addItemFromButton(btn) {
+    function getDetailProductId() {
+      const parts = location.pathname.split("/").filter(Boolean);
+      const i = parts.indexOf("product");
+      return i >= 0 && parts[i + 1] ? decodeURIComponent(parts[i + 1]) : null;
+    }
+
+    async function addItemFromButton(btn) {
+      const pid = getDetailProductId();
+      if (pid && window.UrbanVibeCart && UrbanVibeCart.getToken()) {
+        try {
+          await UrbanVibeCart.add(pid, 1);
+          animateCartIcon();
+        } catch (e) {
+          alert((e && e.message) || "Khong them duoc vao gio hang.");
+        }
+        return;
+      }
+
       const card = btn.closest("main") || document.body;
       const nameEl = card.querySelector("h1, h2, h3");
       const priceEl = card.querySelector("span.font-headline, p.text-primary-container, .text-primary-container");
@@ -537,6 +555,8 @@
       });
     });
 
+    window.addEventListener("uv-cart-updated", updateCartBadges);
+    if (window.UrbanVibeCart) void UrbanVibeCart.syncFromServer();
     updateCartBadges();
   })();
 </script>

@@ -309,6 +309,7 @@
 </div>
 </div>
 </footer>
+<script src="/ui/uv-cart-sync.js"></script>
 <script>
   (function () {
     const PAGE_TYPE = "protected";
@@ -494,10 +495,25 @@
         btn.addEventListener("click", function () {
           const action = btn.getAttribute("data-action");
           const id = btn.getAttribute("data-id");
+          const cur = getCartItems().find((i) => String(i.id) === String(id));
+          const useApi = window.UrbanVibeCart && UrbanVibeCart.getToken();
+
+          if (useApi) {
+            if (action === "remove") {
+              UrbanVibeCart.remove(id).then(renderCart).catch((e) => alert((e && e.message) || "Loi"));
+              return;
+            }
+            if (!cur) return;
+            const q = Number(cur.quantity) + (action === "increase" ? 1 : -1);
+            if (q < 1) return;
+            UrbanVibeCart.updateQty(id, q).then(renderCart).catch((e) => alert((e && e.message) || "Loi"));
+            return;
+          }
+
           const next = getCartItems()
             .map((i) => ({ ...i }))
             .filter((i) => i.id);
-          const idx = next.findIndex((i) => i.id === id);
+          const idx = next.findIndex((i) => String(i.id) === String(id));
           if (idx === -1) return;
 
           if (action === "increase") next[idx].quantity += 1;
@@ -518,8 +534,19 @@
       });
     }
 
-    updateCartBadges();
-    renderCart();
+    window.addEventListener("uv-cart-updated", function () {
+      renderCart();
+      updateCartBadges();
+    });
+
+    async function bootstrapCart() {
+      if (window.UrbanVibeCart && UrbanVibeCart.getToken()) {
+        await UrbanVibeCart.syncFromServer();
+      }
+      renderCart();
+      updateCartBadges();
+    }
+    void bootstrapCart();
   })();
 </script>
 </body></html>
