@@ -128,7 +128,7 @@
 <div class="flex flex-wrap gap-4">
 <div class="group relative">
 <button class="flex items-center gap-2 border border-outline-variant/30 px-6 py-3 hover:border-primary-container transition-colors uppercase font-headline tracking-widest text-xs">
-                            Sort: Newest <span class="material-symbols-outlined text-sm">expand_more</span>
+<span id="uv-sort-label">Sort: Newest</span> <span class="material-symbols-outlined text-sm">expand_more</span>
 </button>
 <!-- Dropdown Mock -->
 <div class="absolute right-0 top-full mt-2 w-48 bg-surface-container-highest border border-outline-variant/30 hidden group-hover:block z-10">
@@ -146,52 +146,73 @@
 <div class="flex flex-col md:flex-row gap-12">
 <!-- Sidebar Filters -->
 <aside class="hidden md:block w-64 shrink-0 space-y-10">
-<section>
+<section id="uv-category-section">
 <h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Category</h3>
-<div class="space-y-3">
+<div class="space-y-3" id="uv-category-filters">
 <label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<input checked="" class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="__all__" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">All</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="hoodies" type="checkbox"/>
 <span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Hoodies</span>
 </label>
 <label class="flex items-center gap-3 cursor-pointer group">
-<input checked="" class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
-<span class="text-xs uppercase tracking-widest text-primary-container">T-Shirts</span>
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="tees" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Tees</span>
 </label>
 <label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="sneakers" type="checkbox"/>
 <span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Sneakers</span>
 </label>
 <label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" type="checkbox"/>
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="jackets" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Jackets</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="pants" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Pants</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="accessories" type="checkbox"/>
 <span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Accessories</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="caps" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Caps</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="uv-cat w-4 h-4 bg-transparent border-outline-variant/50 checked:bg-primary-container rounded-none focus:ring-0" data-cat="collabs" type="checkbox"/>
+<span class="text-xs uppercase tracking-widest group-hover:text-primary-container transition-colors">Collabs</span>
 </label>
 </div>
 </section>
-<section>
+<section id="uv-size-section">
 <h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Size</h3>
-<div class="grid grid-cols-3 gap-2">
-<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XS</button>
-<button class="border border-primary-container bg-primary-container/10 py-2 text-[10px]">S</button>
-<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">M</button>
-<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">L</button>
-<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XL</button>
-<button class="border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XXL</button>
+<div class="grid grid-cols-3 gap-2" id="uv-size-buttons">
+<button type="button" data-size="" class="uv-size border border-primary-container bg-primary-container/10 py-2 text-[10px]">All</button>
+<button type="button" data-size="xs" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XS</button>
+<button type="button" data-size="s" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">S</button>
+<button type="button" data-size="m" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">M</button>
+<button type="button" data-size="l" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">L</button>
+<button type="button" data-size="xl" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XL</button>
+<button type="button" data-size="xxl" class="uv-size border border-outline-variant/30 py-2 text-[10px] hover:border-primary-container transition-colors">XXL</button>
 </div>
 </section>
 <section>
 <h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Price Range</h3>
 <div class="px-2">
-<input class="w-full h-1 bg-surface-container-highest accent-primary-container cursor-pointer appearance-none" type="range"/>
+<input id="uv-price-range" class="w-full h-1 bg-surface-container-highest accent-primary-container cursor-pointer appearance-none" type="range"/>
 <div class="flex justify-between mt-4 text-[10px] uppercase tracking-widest text-neutral-500">
-<span>$50</span>
-<span>$1200</span>
+<span id="uv-price-min-label">$0</span>
+<span id="uv-price-max-label">$400</span>
 </div>
 </div>
 </section>
 <section>
 <h3 class="font-headline font-bold uppercase tracking-[0.2em] text-sm mb-6 border-b border-outline-variant/20 pb-2">Rating</h3>
 <div class="space-y-2">
-<button class="flex items-center gap-2 group w-full">
+<button type="button" id="uv-rating-filter-btn" class="flex items-center gap-2 group w-full">
 <div class="flex text-primary-container">
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -204,119 +225,12 @@
 </div>
 </section>
 </aside>
-<!-- Product Grid -->
-<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-<!-- Product Card 1 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Modern streetwear white hoodie with minimalist neon graphics studio shot on dark grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDrrDtkqzjD8qCZqNLWPnRLV-diEF0Xqz8xGjPzD2av-xTBe1MNMUjNz2gEWGS9fqI5vVTIQzbzXqTZjQnR_fo4IQMH_vTLFLLPRp6SREmmBELs3HNQEdmkThkhujUMu52mSdQKJhbN5NXxqf_XCON785zi8F5gMi-OMAcftDYOF6q880T5przumNDqz7zFw6AcC1BBgd0plHVrqvZ111rFyUh-bjjET18bmdKaf6X4H5EcPHmdkrBl_D5MSLxDLeMv9hphOmr-vXA"/>
-<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
-                                Quick Add — $145
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Heavyweight Fleece</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Cipher Hoodie v.01</h3>
-</div>
-<span class="font-headline font-black text-xl">$145</span>
-</div>
-</div>
-<!-- Product Card 2 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Futuristic black sneakers with vibrant purple accents and thick architectural sole on dark stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoK1djUsT8sfc4GcjDMqidthWqKAtL_HvhdTxFb2iX4ReQgim3l7PjTjgQt_13ypG6YJ7JPGwPfFah7LBmsvNBV9ae7PxZv8n2nk6Pz_ruNrSq2lQujiZ4L3vb9oSP5s7xCZmaHvqi30BUjQ0ZwPEWYAbaWBvZlJz4b9-uOi5jn4l-0HxK9G_aQTKt4XwQ5gh--URpOoMToq0X8kpywXCBjQ_uKP2QOEUjBLTyznxn1uwYsJWkdayIa6UM29cPXKKb61h1cWUeHiXh"/>
-<div class="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
-                            Sold Out
-                        </div>
-<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-surface-container-highest text-neutral-400 w-full py-4 font-headline font-bold uppercase tracking-widest text-xs cursor-not-allowed">
-                                Notify Me
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-neutral-500 uppercase tracking-[0.2em] mb-1">Footwear / Kinetic</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Neon Phantom Low</h3>
-</div>
-<span class="font-headline font-black text-xl">$290</span>
-</div>
-</div>
-<!-- Product Card 3 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Black oversized cotton t-shirt with large back typography print hanging in a brutalist industrial gallery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzml_j4VpI_zyIEGUWIsTqEyCUP7s4MFBF7lb-UA3PHlhMqG1FPwQMaVl5FeQyOGs1k7O-1yuMFDgZq-bnFvrQ9xC5xkzVooOow1VsYhIh_pJJy49uOX-fgjZSgH-6_yvbAqAbyCG9-ijTM6bxV_POLHT-O5F7reckGlRhnjKyd4bN8gAFGxf3QTS8s9vMhR9oW39eoAFbEFpVckis6SMQi4vKofktf4A6XjTQxAjcADTfHYMEqqbBvHZ5SECI63SHWL4XtVQBnr7b"/>
-<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
-                                Quick Add — $65
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Essential / Boxy Fit</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Brutalist Logo Tee</h3>
-</div>
-<span class="font-headline font-black text-xl">$65</span>
-</div>
-</div>
-<!-- Product Card 4 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Luxury black leather shoulder bag with industrial metal hardware on a mirror surface with neon light reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Cwd1BCM_843IpKoh_u7ndbKf89B2_zAfDJtr70Kf9LvPPw5AsMtEWkShE-X2ri45VXR8Zvck7rQFmrOTtKPxmOSunrW9Nv02v5ErxnhTk1okN1b7k5VD4iywaiTQb0fbJ28B_tbIySZG0DYyarnawbfc1B4tnASveOw_2Oon2zFJCDbWKmfVKYDid-czA1Ewbl4Nlx6IxkjvJ-XMaK1dNPKxkx6GtCmw3X2G9tyvkPqmon09Utst_DHUp7DOH50jKn5Q-fgIho9M"/>
-<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
-                                Quick Add — $420
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Accessory / Noir</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Obsidian Utility Bag</h3>
-</div>
-<span class="font-headline font-black text-xl">$420</span>
-</div>
-</div>
-<!-- Product Card 5 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Sleek techwear puffer jacket in deep charcoal grey with iridescent waterproof zippers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8KIegc52M3ivkF-CPzYXST-wTMFNL1R8Fv4iv2k-3EOXrITcjn8rPRzc4ffvraoDCOp3XRLunT2LmWPJXm7UxJ6DfAiwzuyq1paLbbD6EIWggotRvTB-GJ4ogXHe5V2ScRgIYc23zqgwUp2IxVNeQKPxQT406NAcdgrGkZIz4EKJ6yiOpJsP1pQwykni_NOagptord-JY7Xe_zxYQ_ci2ZBclCs_ImfTtLQh1Pqh5hg6GEjV1ttNrz_M1Sz67sFJ1cN8guzb6qdK7"/>
-<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
-                                Quick Add — $580
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Outerwear / Apex</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Glitch Puffer Shell</h3>
-</div>
-<span class="font-headline font-black text-xl">$580</span>
-</div>
-</div>
-<!-- Product Card 6 -->
-<div class="group">
-<div class="relative bg-surface-container-lowest aspect-[3/4] overflow-hidden">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" data-alt="Off-white minimalist sweatshirt with tonal embroidery on high-quality loopback cotton" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1p0dTpzfUybEoKpNAKB-JHz33C2LitYmqcBB-a6wqgxyMHLo23zLZ9Pt5_pImZfnm_Hw3GEElyUseCXLFzYb0tCqNWmWpANcNVWQw8q9Q62M6Ag5eVzjRz7OYGXWJk4drFwNZ1NLGJPBmUrgQ54Qa4zsIl658oksZF4bTif41NB1jA8GW76PQ88NQ5Pstbo4SUNmrNMZc7iFAweOY2H2FCwK6olVKkMglz53J1YX9kll-2CBXvlghW0u-0uwsBy4JrWikPeM6NI5l"/>
-<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-<button class="bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow">
-                                Quick Add — $110
-                            </button>
-</div>
-</div>
-<div class="mt-6 flex justify-between items-start">
-<div>
-<p class="text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1">Essential / Fleece</p>
-<h3 class="font-headline font-bold uppercase tracking-tight text-lg">Mono Crewneck</h3>
-</div>
-<span class="font-headline font-black text-xl">$110</span>
-</div>
-</div>
+<!-- Product grid: filled from /api/products (all pages, Neon DB) -->
+<div class="flex-1 min-w-0">
+<p class="mb-4 text-[10px] uppercase tracking-widest text-neutral-500 font-headline" id="uv-products-status"></p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12" id="uv-product-grid"></div>
+<div class="py-20 text-center text-neutral-500 text-xs uppercase tracking-widest font-headline" id="uv-products-loading">Loading products from database…</div>
+<p class="hidden py-12 text-center text-sm text-red-400 font-body" id="uv-products-error"></p>
 </div>
 </div>
 <!-- AI Recommendations Section -->
@@ -533,83 +447,279 @@
       animateCartIcon();
     }
 
-    // ---------- Product filters & sorting ----------
-    const grid = document.querySelector("main .flex-1.grid");
-    const productCards = grid
-      ? Array.from(grid.children).filter((el) => el.classList.contains("group"))
-      : [];
-
-    function inferCategory(text) {
-      const t = (text || "").toLowerCase();
-      if (t.includes("footwear") || t.includes("sneaker") || t.includes("runner")) return "sneakers";
-      if (t.includes("accessory") || t.includes("bag") || t.includes("hat")) return "accessories";
-      if (t.includes("outerwear") || t.includes("puffer")) return "jackets";
-      if (t.includes("tee")) return "tees";
-      return "hoodies";
+    function addProductToCart(p) {
+      const id = String(p.id);
+      const name = String(p.name || "UrbanVibe Item");
+      const price = Number(p.price);
+      const image = (Array.isArray(p.images) && p.images[0]) || "";
+      const items = getCartItems();
+      const idx = items.findIndex((i) => String(i.id) === id);
+      if (idx >= 0) items[idx].quantity += 1;
+      else items.push({ id, name, price, image, meta: String(p.category || ""), quantity: 1 });
+      setCartItems(items);
+      animateCartIcon();
     }
 
-    function setupCardMetadata() {
-      const sizePool = ["xs,s", "s,m", "m,l", "l,xl", "xl,xxl", "m,l,xl"];
-      productCards.forEach((card, idx) => {
-        const name = card.querySelector("h3")?.textContent || "";
-        const priceText = card.querySelector("span.font-headline")?.textContent || "";
-        const typeText = card.querySelector("p.text-primary-container, p.text-neutral-500")?.textContent || "";
-        const category = inferCategory(typeText + " " + name);
-        card.dataset.category = category;
-        card.dataset.price = String(parsePriceFromText(priceText));
-        card.dataset.sizes = sizePool[idx % sizePool.length];
+    function formatMoney(n) {
+      return "$" + Number(n).toFixed(2);
+    }
+
+    function sizesForProduct(id) {
+      const pool = ["xs", "s", "m", "l", "xl", "xxl"];
+      let h = 0;
+      const s = String(id);
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+      const i0 = h % pool.length;
+      return [pool[i0], pool[(i0 + 1) % pool.length], pool[(h >> 4) % pool.length]];
+    }
+
+    function createProductCardEl(p) {
+      const soldOut = Number(p.stock) === 0;
+      const price = Number(p.price);
+      const imgSrc = (Array.isArray(p.images) && p.images[0]) || "";
+
+      const wrap = document.createElement("div");
+      wrap.className = "group cursor-pointer uv-product-card";
+
+      const imgBox = document.createElement("div");
+      imgBox.className = "relative bg-surface-container-lowest aspect-[3/4] overflow-hidden";
+
+      if (soldOut) {
+        const badge = document.createElement("div");
+        badge.className =
+          "absolute top-4 left-4 bg-primary-container text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase";
+        badge.textContent = "Sold Out";
+        imgBox.appendChild(badge);
+      }
+
+      const img = document.createElement("img");
+      img.className =
+        "w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100";
+      img.src = imgSrc;
+      img.alt = p.name || "";
+      imgBox.appendChild(img);
+
+      const overlay = document.createElement("div");
+      overlay.className = soldOut
+        ? "absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6"
+        : "absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6";
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = soldOut
+        ? "bg-surface-container-highest text-neutral-400 w-full py-4 font-headline font-bold uppercase tracking-widest text-xs cursor-not-allowed"
+        : "uv-quick-add bg-primary-container text-white w-full py-4 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-primary-fixed-variant transition-colors neon-glow";
+      btn.textContent = soldOut ? "Notify Me" : "Quick Add — " + formatMoney(price);
+      if (!soldOut) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          addProductToCart(p);
+        });
+      }
+      overlay.appendChild(btn);
+      imgBox.appendChild(overlay);
+
+      wrap.addEventListener("click", function (e) {
+        if (e.target.closest("button")) return;
+        window.location.href = "/product/" + encodeURIComponent(p.id);
       });
+
+      const bottom = document.createElement("div");
+      bottom.className = "mt-6 flex justify-between items-start";
+      const left = document.createElement("div");
+      const typeP = document.createElement("p");
+      typeP.className = "text-[10px] text-primary-container uppercase tracking-[0.2em] mb-1";
+      typeP.textContent = String(p.category || "");
+      const h3 = document.createElement("h3");
+      h3.className = "font-headline font-bold uppercase tracking-tight text-lg";
+      h3.textContent = p.name || "";
+      left.appendChild(typeP);
+      left.appendChild(h3);
+      const priceSpan = document.createElement("span");
+      priceSpan.className = "font-headline font-black text-xl";
+      priceSpan.textContent = formatMoney(price);
+      bottom.appendChild(left);
+      bottom.appendChild(priceSpan);
+      wrap.appendChild(imgBox);
+      wrap.appendChild(bottom);
+      return wrap;
     }
 
+    // ---------- Load all products from Neon (/api/products), then filter client-side ----------
+    let dbProducts = [];
     let currentSort = "newest";
-    let selectedSize = "s";
-    const sidebar = document.querySelector("aside");
-    const categoryChecks = sidebar
-      ? Array.from(sidebar.querySelectorAll("section:first-of-type input[type='checkbox']"))
-      : [];
-    const sizeButtons = sidebar
-      ? Array.from(sidebar.querySelectorAll("section:nth-of-type(2) button"))
-      : [];
-    const priceRange = sidebar
-      ? sidebar.querySelector("section:nth-of-type(3) input[type='range']")
-      : null;
+    let selectedSizeFilter = "";
+    let ratingFilterActive = false;
+    let renderGen = 0;
 
-    if (priceRange) {
-      priceRange.min = "50";
-      priceRange.max = "1200";
-      priceRange.value = "1200";
+    const priceRange = document.getElementById("uv-price-range");
+    const productGridEl = document.getElementById("uv-product-grid");
+    const loadingEl = document.getElementById("uv-products-loading");
+    const errorEl = document.getElementById("uv-products-error");
+    const statusEl = document.getElementById("uv-products-status");
+    const categoryRoot = document.getElementById("uv-category-filters");
+    const sizeButtons = Array.from(document.querySelectorAll("#uv-size-buttons .uv-size"));
+    const ratingBtn = document.getElementById("uv-rating-filter-btn");
+
+    function getSelectedCategories() {
+      const allCb = categoryRoot && categoryRoot.querySelector('input[data-cat="__all__"]');
+      const specifics = categoryRoot
+        ? Array.from(categoryRoot.querySelectorAll('input.uv-cat[data-cat]:not([data-cat="__all__"])')).filter(
+            (c) => c.checked
+          )
+        : [];
+      if (allCb && allCb.checked) return [];
+      if (specifics.length === 0) return [];
+      return specifics.map((c) => String(c.getAttribute("data-cat") || "").toLowerCase());
+    }
+
+    function onCategoryChange(changed) {
+      const allCb = categoryRoot && categoryRoot.querySelector('input[data-cat="__all__"]');
+      const others = categoryRoot
+        ? Array.from(categoryRoot.querySelectorAll('input.uv-cat[data-cat]:not([data-cat="__all__"])'))
+        : [];
+      if (changed.getAttribute("data-cat") === "__all__") {
+        if (changed.checked) others.forEach((o) => { o.checked = false; });
+      } else {
+        if (changed.checked && allCb) allCb.checked = false;
+        const anySpecific = others.some((o) => o.checked);
+        if (!anySpecific && allCb) allCb.checked = true;
+      }
+      applyFilters();
+    }
+
+    function configurePriceRangeFromProducts(products) {
+      if (!priceRange) return;
+      let maxP = 400;
+      if (products.length) {
+        maxP = Math.ceil(Math.max(50, ...products.map((x) => Number(x.price))));
+      }
+      priceRange.min = "0";
+      priceRange.max = String(maxP);
+      priceRange.step = "1";
+      priceRange.value = String(maxP);
+      const minLab = document.getElementById("uv-price-min-label");
+      const maxLab = document.getElementById("uv-price-max-label");
+      if (minLab) minLab.textContent = "$0";
+      if (maxLab) maxLab.textContent = "$" + maxP;
+    }
+
+    function syncPriceMaxLabel() {
+      const maxLab = document.getElementById("uv-price-max-label");
+      if (maxLab && priceRange) maxLab.textContent = "$" + priceRange.value;
+    }
+
+    function getFilteredProducts() {
+      const cats = getSelectedCategories();
+      const maxPrice = priceRange ? Number(priceRange.value) : 1e9;
+      const minRating = ratingFilterActive ? 4 : 0;
+
+      let list = dbProducts.filter((p) => {
+        const price = Number(p.price);
+        const cat = String(p.category || "").toLowerCase();
+        if (price > maxPrice) return false;
+        if (Number(p.rating) < minRating) return false;
+        if (cats.length && !cats.includes(cat)) return false;
+        if (selectedSizeFilter) {
+          const sz = sizesForProduct(p.id);
+          if (!sz.includes(selectedSizeFilter)) return false;
+        }
+        return true;
+      });
+
+      const t = (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+      if (currentSort === "price-asc") {
+        list.sort((a, b) => Number(a.price) - Number(b.price));
+      } else if (currentSort === "price-desc") {
+        list.sort((a, b) => Number(b.price) - Number(a.price));
+      } else if (currentSort === "popularity") {
+        list.sort((a, b) => Number(b.rating) - Number(a.rating) || t(a, b));
+      } else {
+        list.sort(t);
+      }
+      return list;
+    }
+
+    function updateSortLabel() {
+      const el = document.getElementById("uv-sort-label");
+      if (!el) return;
+      const map = {
+        newest: "Sort: Newest",
+        "price-asc": "Sort: Price Low → High",
+        "price-desc": "Sort: Price High → Low",
+        popularity: "Sort: Popularity"
+      };
+      el.textContent = map[currentSort] || map.newest;
     }
 
     function applyFilters() {
-      const selectedCategories = categoryChecks
-        .filter((c) => c.checked)
-        .map((c) => c.parentElement?.textContent?.trim().toLowerCase() || "");
-      const maxPrice = priceRange ? Number(priceRange.value) : 999999;
-
-      let list = productCards.filter((card) => {
-        const cat = card.dataset.category || "";
-        const price = Number(card.dataset.price || "0");
-        const sizes = (card.dataset.sizes || "").split(",");
-        const passCat =
-          selectedCategories.length === 0 ||
-          selectedCategories.some((s) => cat.includes(s.replace("t-shirts", "tees")));
-        const passSize = !selectedSize || sizes.includes(selectedSize);
-        const passPrice = price <= maxPrice;
-        const soldOut = (card.textContent || "").toLowerCase().includes("sold out");
-        return passCat && passSize && passPrice && !soldOut;
-      });
-
-      if (currentSort === "price-asc") {
-        list.sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price));
-      } else if (currentSort === "price-desc") {
-        list.sort((a, b) => Number(b.dataset.price) - Number(a.dataset.price));
+      if (!productGridEl) return;
+      const gen = ++renderGen;
+      const list = getFilteredProducts();
+      if (statusEl) {
+        statusEl.textContent =
+          dbProducts.length === 0
+            ? ""
+            : "Showing " + list.length + " of " + dbProducts.length + " products (database)";
       }
+      productGridEl.innerHTML = "";
+      const chunk = 80;
+      let i = 0;
+      function appendChunk() {
+        if (gen !== renderGen) return;
+        const end = Math.min(i + chunk, list.length);
+        const frag = document.createDocumentFragment();
+        for (; i < end; i++) frag.appendChild(createProductCardEl(list[i]));
+        productGridEl.appendChild(frag);
+        if (i < list.length) {
+          requestAnimationFrame(appendChunk);
+        }
+      }
+      appendChunk();
+      syncPriceMaxLabel();
+    }
 
-      productCards.forEach((c) => (c.style.display = "none"));
-      list.forEach((c) => {
-        c.style.display = "";
-        grid.appendChild(c);
-      });
+    async function loadAllProductsFromApi() {
+      const limit = 100;
+      let page = 1;
+      let totalPages = 1;
+      dbProducts = [];
+      if (errorEl) {
+        errorEl.classList.add("hidden");
+        errorEl.textContent = "";
+      }
+      if (loadingEl) loadingEl.classList.remove("hidden");
+      try {
+        for (;;) {
+          if (statusEl) {
+            statusEl.textContent =
+              totalPages > 1 ? "Loading products… page " + page + " / " + totalPages : "Loading products…";
+          }
+          const res = await fetch("/api/products?page=" + page + "&limit=" + limit);
+          const json = await res.json();
+          if (!res.ok || !json.success) {
+            throw new Error(json.message || "Request failed (" + res.status + ")");
+          }
+          totalPages = json.pagination && json.pagination.totalPages ? json.pagination.totalPages : 1;
+          const batch = json.data || [];
+          dbProducts = dbProducts.concat(batch);
+          if (page >= totalPages) break;
+          page += 1;
+        }
+        if (loadingEl) loadingEl.classList.add("hidden");
+        configurePriceRangeFromProducts(dbProducts);
+        applyFilters();
+        updateSortLabel();
+      } catch (err) {
+        if (loadingEl) loadingEl.classList.add("hidden");
+        if (errorEl) {
+          errorEl.classList.remove("hidden");
+          errorEl.textContent =
+            (err && err.message) || "Could not load products. Check API and DATABASE_URL on the server.";
+        }
+        if (statusEl) statusEl.textContent = "";
+      }
     }
 
     function routeFromLabel(label) {
@@ -638,18 +748,21 @@
         a.addEventListener("click", (e) => {
           e.preventDefault();
           currentSort = "price-asc";
+          updateSortLabel();
           applyFilters();
         });
       } else if (text.includes("price: high-low")) {
         a.addEventListener("click", (e) => {
           e.preventDefault();
           currentSort = "price-desc";
+          updateSortLabel();
           applyFilters();
         });
       } else if (text.includes("popularity")) {
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          currentSort = "newest";
+          currentSort = "popularity";
+          updateSortLabel();
           applyFilters();
         });
       }
@@ -662,7 +775,10 @@
 
       const target = routeFromLabel(btn.textContent);
       const text = (btn.textContent || "").toLowerCase();
-      if (text.includes("add to bag") || text.includes("quick add")) {
+      if (
+        (text.includes("add to bag") || text.includes("quick add")) &&
+        !btn.classList.contains("uv-quick-add")
+      ) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           addItemFromButton(btn);
@@ -679,7 +795,13 @@
       });
     });
 
-    categoryChecks.forEach((cb) => cb.addEventListener("change", applyFilters));
+    if (categoryRoot) {
+      categoryRoot.querySelectorAll("input.uv-cat").forEach((cb) => {
+        cb.addEventListener("change", function () {
+          onCategoryChange(this);
+        });
+      });
+    }
     sizeButtons.forEach((btn) => {
       btn.addEventListener("click", function (e) {
         e.preventDefault();
@@ -688,16 +810,28 @@
           b.classList.add("border-outline-variant/30");
         });
         btn.classList.add("border-primary-container", "bg-primary-container/10");
-        selectedSize = (btn.textContent || "").trim().toLowerCase();
+        selectedSizeFilter = String(btn.getAttribute("data-size") || "").toLowerCase();
         applyFilters();
       });
     });
     if (priceRange) {
-      priceRange.addEventListener("input", applyFilters);
+      priceRange.addEventListener("input", function () {
+        syncPriceMaxLabel();
+        applyFilters();
+      });
+    }
+    if (ratingBtn) {
+      ratingBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        ratingFilterActive = !ratingFilterActive;
+        ratingBtn.classList.toggle("border", ratingFilterActive);
+        ratingBtn.classList.toggle("border-primary-container", ratingFilterActive);
+        ratingBtn.classList.toggle("bg-primary-container/10", ratingFilterActive);
+        applyFilters();
+      });
     }
 
-    setupCardMetadata();
-    applyFilters();
+    loadAllProductsFromApi();
     updateCartBadges();
   })();
 </script>
